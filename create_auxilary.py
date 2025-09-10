@@ -49,7 +49,7 @@ def create_cam_rankings(csv_path: str):
                 'week': week,
                 'ap_rank': ap_rank if ap_rank <= 25 else 26,
                 #'ap_rank': ap_rank, <- leave no cap on, which I'd assume would extend the ranks (if we want to go past 26) 
-                #'points' : points, <- would it be helpful to keep track of total points? 
+                #'points' : points, #<- would it be helpful to keep track of total points? 
                 # ^^^^ the commented code I think would make sense if we want to try and extend beyond top 25, otherwise
                 #           we could always set non ranked teams to 0; whichever makes most sense for our goals
                 # I'm leaning towards maybe cutting out the non ranked teams? (you mentioned the average and median need to 
