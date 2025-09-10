@@ -5,8 +5,10 @@ import statistics
 def create_cam_rankings(csv_path: str):
     df_cam = pd.DataFrame(columns=["team", "year", "week", "ap_rank", "average", "median"])
     df_scraped = pd.read_csv(csv_path)
-    
-    for (season, week), group in df_scraped.groupby(['Season', 'Week']):
+    # can we look to streamline some parts of the code? 
+    # let's also make sure to sort everything into separate folders to get everything organized 
+    # look to start calculate biases by monday 09/15? 
+    for (season, week), group in df_scraped.groupby(['Season', 'Week']): 
         team_ranks = defaultdict(list)
         for _, row in group.iterrows():
             for rank in range(1, 26):

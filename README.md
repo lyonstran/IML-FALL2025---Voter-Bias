@@ -1,6 +1,14 @@
 # IML-FALL2025---Voter-Bias
 
+09/10/2025 - Goals after meeting: (double check with log on box)
+- can we look to streamline some parts of the code? 
+- let's also make sure to sort everything into separate folders to get everything organized 
+- look to start calculate biases by monday 09/15?
+    - spearman distance stuff -> we would expect "bias" to go down as the season goes on... 
+    - ^^let's make a master bias file for each week, each season, and each voter pair^^ <- can serve as basis for additional analysis 
+- work on conference affiliations 
 
+# _______________________________________________________________________________________________________________
 09/09/2025 - Current TODO list:
 Create various auxiliary files:
 
@@ -14,7 +22,7 @@ Conference affiliations:  A file showing,  for each week/season and each team ea
 
 Since teams occasionally change conferences, just having a list of teams along with their affiliation won’t do.
 
-# __________________________________________________________________________________________________________________________
+# _________________________________________________________________________________________________________________
 Project Goals
 • Develop measures to quantify voter biases in AP Top 25 polls in a statistically rigorous manner.
 • Using these measures, analyze the ballot data from AP Top 25 College Football and Men’s Basket-

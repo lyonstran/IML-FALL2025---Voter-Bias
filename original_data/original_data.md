@@ -1,2 +1,2 @@
-# College Poll Ballot Data
+# College Poll Ballot Data (WIP)
 The 'original' two CSV files in this folder contains the ballot data from the AP Top 25 College Football and Men's Basketball polls that will form the basis of our analysis on voter biases. The data was scraped, cleaned, and downloaded from collegepolltracker.com in the Spring 2025 semester IML project. 
