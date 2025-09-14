@@ -6,6 +6,8 @@ import statistics
 def create_cam_rankings(csv_path: str): # for every team in a year/week, 
     df_cam = pd.DataFrame(columns=["team", "year", "week", "ap_rank", "average", "median"]) # df to be returned
     df_scraped = pd.read_csv(csv_path) 
+    df_scraped['Season'] = pd.to_numeric(df_scraped['Season'], errors='coerce') # to order numbers
+    df_scraped['Week'] = pd.to_numeric(df_scraped['Week'], errors='coerce') # to order numbers
 
     for (season, week), group in df_scraped.groupby(['Season', 'Week']): # go through by each week/year
         team_ranks = defaultdict(list) # map, (team -> all AP ranks for that week/year)
@@ -35,8 +37,8 @@ def create_cam_rankings(csv_path: str): # for every team in a year/week,
             
             new_row = {
                 'team': team,
-                'year': season,
-                'week': week,
+                'year': int(season),
+                'week': int(week),
                 'ap_rank': ap_rank if ap_rank <= 25 else 26,
                 #'ap_rank': ap_rank, <- leave no cap on, which I'd assume would extend the ranks (if we want to go past 26) 
                 #'points' : points, #<- would it be helpful to keep track of total points? 
@@ -49,14 +51,48 @@ def create_cam_rankings(csv_path: str): # for every team in a year/week,
             }
             
             df_cam.loc[len(df_cam)] = new_row
-    df_cam.to_csv("test_output.csv", index=False)
+    df_cam.to_csv("cam_output.csv", index=False)
     return df_cam
 
-def create_voters(csv_path: str):
-    return "work in progress"
+def create_voters(csv_path: str): # df of all voters in a certain week/year
+    df_voters = pd.DataFrame(columns=["year", "week", "voters"]) # df to be returned
+    df_scraped = pd.read_csv(csv_path) 
 
-def create_teams(csv_path: str):
-    return "work in progress"
+    df_scraped['Season'] = pd.to_numeric(df_scraped['Season'], errors='coerce') 
+    for (season, week), group in df_scraped.groupby(['Season', 'Week']): # sort by week/year
+        voters = set() # set of all voters
+        for _, row in group.iterrows():
+            voters.add(row["Pollster"]) # add all the voters into the set
+        new_row = {
+                'year': int(season),
+                'week': int(week),
+                'voters': tuple(voters), 
+            }   # make the new row
+        df_voters.loc[len(df_voters)] = new_row
+    df_voters = df_voters.sort_values(['year', 'week']).reset_index(drop=True)   # organize df by week/year  
+    df_voters.to_csv("create_voters_output.csv", index=False)
+    return df_voters
+
+def create_teams(csv_path: str): # df of all teams in a certain week/year
+    df_teams = pd.DataFrame(columns=["year", "week", "teams"]) # df to be returned
+    df_scraped = pd.read_csv(csv_path) 
+
+    df_scraped['Season'] = pd.to_numeric(df_scraped['Season'], errors='coerce') 
+    for (season, week), group in df_scraped.groupby(['Season', 'Week']): # sort by week/year
+        teams = set() # set of all teams
+        for _, row in group.iterrows():
+            for i in range (1, 26):
+                teams.add(row[str(i)]) # add all the teams into the set
+        new_row = {
+                'year': int(season),
+                'week': int(week),
+                'teams': tuple(teams), 
+            }   # make the new row
+        df_teams.loc[len(df_teams)] = new_row
+    df_teams = df_teams.sort_values(['year', 'week']).reset_index(drop=True)   # organize df by week/year  
+    df_teams.to_csv("create_teams_output.csv", index=False)
+    return df_teams
 
 if __name__ == "__main__":
-    df_rankings = create_cam_rankings("original_data/college_basketball_polls_original.csv")
+    #df_rankings = create_cam_rankings("original_data/college_basketball_polls_original.csv")
+    df_voters = create_teams("/Users/albertbogdan/IML-FALL2025---Voter-Bias/original_data/college_basketball_polls_original.csv")
