@@ -2,7 +2,9 @@ import pandas as pd
 from collections import defaultdict
 import statistics
 
-
+# input - (Pollster,Season,Week,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25)
+# output - (team,year,week,ap_rank,average,median)
+# given scraped data, finds ap_rank/average/median rank for each team in each week
 def create_cam_rankings(csv_path: str): # for every team in a year/week, 
     df_cam = pd.DataFrame(columns=["team", "year", "week", "ap_rank", "average", "median"]) # df to be returned
     df_scraped = pd.read_csv(csv_path) 
@@ -54,6 +56,8 @@ def create_cam_rankings(csv_path: str): # for every team in a year/week,
     df_cam.to_csv("cam_output.csv", index=False)
     return df_cam
 
+# output - (year,week,voters)
+# outputs all the voters for a given week
 def create_voters(csv_path: str): # df of all voters in a certain week/year
     df_voters = pd.DataFrame(columns=["year", "week", "voters"]) # df to be returned
     df_scraped = pd.read_csv(csv_path) 
@@ -73,6 +77,8 @@ def create_voters(csv_path: str): # df of all voters in a certain week/year
     df_voters.to_csv("create_voters_output.csv", index=False)
     return df_voters
 
+# output - (year,week,teams)
+# outputs all the teams for a given week
 def create_teams(csv_path: str): # df of all teams in a certain week/year
     df_teams = pd.DataFrame(columns=["year", "week", "teams"]) # df to be returned
     df_scraped = pd.read_csv(csv_path) 
@@ -110,6 +116,7 @@ bias(whole season/1st half of season/2nd half of season)-(concensus bias/average
  
 
 
+    EXAMPLE INPUT 
 
       Pollster (v)  Season  Week  Rank                 Team (t)  ap_rank  average  median  bias1(v, t)  bias2(v, t)  bias3(v, t)
 0        adam-jude    2014     1     1  florida-state-seminoles      1.0    3.067     3.0     0.000000    -2.067000    -2.000000
@@ -131,8 +138,8 @@ bias(whole season/1st half of season/2nd half of season)-(concensus bias/average
 62501    adam-jude    2014    17     7  florida-state-seminoles      6.0    7.466     7.0     0.166667    -0.066571     0.000000
 
 RESULT 
-        season      voter                     team   bias1-a  bias1-b   bias1-c   bias2-a   bias2-b  bias2-c   bias3-a  bias3-b   bias3-c
-0    2014  adam-jude  florida-state-seminoles  0.303922      0.0  0.574074 -1.455416 -2.481063 -0.54373 -1.245098  -2.0625 -0.518519
+    season      voter      team                     bias1-a       bias1-b bias1-c   bias2-a   bias2-b   bias2-c  bias3-a    bias3-b  bias3-c
+    2014        adam-jude  florida-state-seminoles  0.303922      0.0     0.574074  -1.455416 -2.481063 -0.54373 -1.245098  -2.0625  -0.518519
 
 """
 
@@ -207,7 +214,93 @@ def create_vt_biases(csv_path: str):
     df_biases.to_csv("average_biases.csv", index=False)
     return df_biases
 
+# output - season,week,bias1_mean,bias1_std,bias2_mean,bias2_std,bias3_mean,bias3_std
+# calculates mean/std of bias for a given week of each season
+def biases_summary_by_week(csv_path: str):
+    df_biases = pd.DataFrame(columns=["season", "week", "bias1_mean", "bias1_std", "bias2_mean", "bias2_std", "bias3_mean", "bias3_std"])
+    df_input = pd.read_csv(csv_path)
+    for (season, week), group in df_input.groupby(['Season', 'Week'], sort=False):
+        mean_1 = group["bias1(v, t)"].mean()
+        std_1 = group["bias1(v, t)"].std()
+        mean_2 = group["bias2(v, t)"].mean()
+        std_2 = group["bias2(v, t)"].std()
+        mean_3 = group["bias3(v, t)"].mean()
+        std_3 = group["bias3(v, t)"].std()
+
+        new_row = {
+            'season': int(season),
+            'week': week,
+            'bias1_mean': mean_1,    
+            'bias1_std': std_1,
+            'bias2_mean': mean_2,
+            'bias2_std': std_2,
+            'bias3_mean': mean_3,
+            'bias3_std': std_3,
+        }
+        df_biases.loc[len(df_biases)] = new_row   
+    df_biases.to_csv("summary_stats_by_week.csv", index=False)
+    df_biases = df_biases.sort_values(['season', 'week']).reset_index(drop=True)
+    return df_biases
+
+# output - season,team,bias1_mean,bias1_std,bias2_mean,bias2_std,bias3_mean,bias3_std
+# calculates mean/std of bias for a given team of each season
+def biases_summary_by_team(csv_path: str):
+    df_biases = pd.DataFrame(columns=["season", "team", "bias1_mean", "bias1_std", "bias2_mean", "bias2_std", "bias3_mean", "bias3_std"])
+    df_input = pd.read_csv(csv_path)
+    df_input = df_input.sort_values(['Season', 'Team (t)'])
+    for (season, team), group in df_input.groupby(['Season', 'Team (t)'], sort=False):
+        mean_1 = group["bias1(v, t)"].mean()
+        std_1 = group["bias1(v, t)"].std()
+        mean_2 = group["bias2(v, t)"].mean()
+        std_2 = group["bias2(v, t)"].std()
+        mean_3 = group["bias3(v, t)"].mean()
+        std_3 = group["bias3(v, t)"].std()
+
+        new_row = {
+            'season': int(season),
+            'team': team,
+            'bias1_mean': mean_1,    
+            'bias1_std': std_1,
+            'bias2_mean': mean_2,
+            'bias2_std': std_2,
+            'bias3_mean': mean_3,
+            'bias3_std': std_3,
+        }
+        df_biases.loc[len(df_biases)] = new_row   
+    df_biases.to_csv("average_biases.csv", index=False)
+    df_biases = df_biases.sort_values(['season', 'team']).reset_index(drop=True)
+    return df_biases
+
+# output - season,voter,bias1_mean,bias1_std,bias2_mean,bias2_std,bias3_mean,bias3_std
+# calculates mean/std of bias for a given voter of each season
+def biases_summary_by_voter(csv_path: str):
+    df_biases = pd.DataFrame(columns=["season", "voter", "bias1_mean", "bias1_std", "bias2_mean", "bias2_std", "bias3_mean", "bias3_std"])
+    df_input = pd.read_csv(csv_path)
+    df_input = df_input.sort_values(['Season', 'Pollster (v)'])
+    for (season, voter), group in df_input.groupby(['Season', 'Pollster (v)'], sort=False):
+        mean_1 = group["bias1(v, t)"].mean()
+        std_1 = group["bias1(v, t)"].std()
+        mean_2 = group["bias2(v, t)"].mean()
+        std_2 = group["bias2(v, t)"].std()
+        mean_3 = group["bias3(v, t)"].mean()
+        std_3 = group["bias3(v, t)"].std()
+
+        new_row = {
+            'season': int(season),
+            'voter': voter,
+            'bias1_mean': mean_1,    
+            'bias1_std': std_1,
+            'bias2_mean': mean_2,
+            'bias2_std': std_2,
+            'bias3_mean': mean_3,
+            'bias3_std': std_3,
+        }
+        df_biases.loc[len(df_biases)] = new_row   
+    df_biases.to_csv("ss_stats_voter.csv", index=False)
+    df_biases = df_biases.sort_values(['season', 'voter']).reset_index(drop=True)
+    return df_biases
+
 if __name__ == "__main__":
     #df_rankings = create_cam_rankings("original_data/college_basketball_polls_original.csv")
     #df_voters = create_teams("/Users/albertbogdan/IML-FALL2025---Voter-Bias/original_data/college_basketball_polls_original.csv")
-    create_vt_biases("/Users/albertbogdan/IML-FALL2025---Voter-Bias/output_data/cfb/master_bias_file_cfb.csv")
+    biases_summary_by_voter("/Users/albertbogdan/IML-FALL2025---Voter-Bias/output_data/cfb/master_bias_file_cfb.csv")
