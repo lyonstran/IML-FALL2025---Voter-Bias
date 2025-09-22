@@ -93,6 +93,121 @@ def create_teams(csv_path: str): # df of all teams in a certain week/year
     df_teams.to_csv("create_teams_output.csv", index=False)
     return df_teams
 
+"""
+Season, Voter, Team, avg bias over full season, avg bias of 1st half season, avg bias over 2nd half season.
+
+bias(whole season/1st half of season/2nd half of season)-(concensus bias/average bias/median bias)
+
+    bias1-a -> AP rank bias for full season
+    bias2-a -> average bias for full season
+    bias3-b -> median bias for full season
+    bias1-b -> AP rank bias for first-half of the season
+    bias2-b -> average bias for first-half of the season
+    bias3-b -> median bias for first-half of the season
+    bias1-c -> AP rank bias for second-half of the season
+    bias2-c -> average bias for second-half of the season
+    bias3-c -> median bias for second-half of the season
+ 
+
+
+
+      Pollster (v)  Season  Week  Rank                 Team (t)  ap_rank  average  median  bias1(v, t)  bias2(v, t)  bias3(v, t)
+0        adam-jude    2014     1     1  florida-state-seminoles      1.0    3.067     3.0     0.000000    -2.067000    -2.000000
+60       adam-jude    2014     2     1  florida-state-seminoles      1.0    3.322     3.0     0.000000    -2.322000    -2.000000
+119      adam-jude    2014     3     1  florida-state-seminoles      1.0    3.617     3.0     0.000000    -2.617000    -2.000000
+179      adam-jude    2014     4     1  florida-state-seminoles      1.0    3.567     3.0     0.000000    -2.567000    -2.000000
+239      adam-jude    2014     5     1  florida-state-seminoles      1.0    4.017     3.0     0.000000    -3.017000    -2.000000
+299      adam-jude    2014     6     1  florida-state-seminoles      1.0    4.400     4.0     0.000000    -3.400000    -3.000000
+359      adam-jude    2014     7     1  florida-state-seminoles      1.0    3.650     3.0     0.000000    -2.650000    -2.000000
+10677    adam-jude    2014     8     2  florida-state-seminoles      2.0    4.417     5.0     0.000000    -1.208500    -1.500000
+10737    adam-jude    2014     9     2  florida-state-seminoles      2.0    4.117     4.0     0.000000    -1.058500    -1.000000
+10797    adam-jude    2014    10     2  florida-state-seminoles      2.0    3.783     4.0     0.000000    -0.891500    -1.000000
+10857    adam-jude    2014    11     2  florida-state-seminoles      2.0    3.800     4.0     0.000000    -0.900000    -1.000000
+10917    adam-jude    2014    12     2  florida-state-seminoles      2.0    3.898     4.0     0.000000    -0.949000    -1.000000
+21234    adam-jude    2014    13     3  florida-state-seminoles      1.0    3.407     3.0     2.000000    -0.135667     0.000000
+21293    adam-jude    2014    14     3  florida-state-seminoles      1.0    3.712     3.0     2.000000    -0.237333     0.000000
+21352    adam-jude    2014    15     3  florida-state-seminoles      2.0    3.897     4.0     0.500000    -0.299000    -0.333333
+21410    adam-jude    2014    16     3  florida-state-seminoles      2.0    4.068     4.0     0.500000    -0.356000    -0.333333
+62501    adam-jude    2014    17     7  florida-state-seminoles      6.0    7.466     7.0     0.166667    -0.066571     0.000000
+
+RESULT 
+        season      voter                     team   bias1-a  bias1-b   bias1-c   bias2-a   bias2-b  bias2-c   bias3-a  bias3-b   bias3-c
+0    2014  adam-jude  florida-state-seminoles  0.303922      0.0  0.574074 -1.455416 -2.481063 -0.54373 -1.245098  -2.0625 -0.518519
+
+"""
+
+def create_vt_biases(csv_path: str):
+    df_biases = pd.DataFrame(columns=["season", "voter", "team", "bias1-a", "bias1-b", "bias1-c", "bias2-a", "bias2-b", "bias2-c", "bias3-a", "bias3-b", "bias3-c"])
+    df_input = pd.read_csv(csv_path)
+
+    season_length = df_input['Week'].max() # find season length by max week
+    half_way = int(season_length / 2) # find half-way point of season
+    df_input = df_input.sort_values(['Season', 'Rank', 'Pollster (v)'])
+    
+    for (season, pollster, team), group in df_input.groupby(['Season', 'Pollster (v)', 'Team (t)'], sort=False):
+        bias1_a = bias1_b = bias1_c = bias2_a = bias2_b = bias2_c = bias3_a = bias3_b = bias3_c = 0
+        fh_rank_counter = 0
+        sh_rank_counter = 0
+        
+        for i in range(1, half_way + 1): # iterate by first half of the season 
+            week_data = group[group["Week"] == i]
+            if len(week_data) > 0:  # if there is data for that team for that week, add it to the sum 
+                fh_rank_counter += 1
+                bias1_a += week_data["bias1(v, t)"].sum()
+                bias2_a += week_data["bias2(v, t)"].sum()
+                bias3_a += week_data["bias3(v, t)"].sum()
+                bias1_b += week_data["bias1(v, t)"].sum()
+                bias2_b += week_data["bias2(v, t)"].sum()
+                bias3_b += week_data["bias3(v, t)"].sum()
+        
+        for i in range(half_way + 1, season_length + 1):
+            week_data = group[group["Week"] == i]
+            if len(week_data) > 0:  
+                sh_rank_counter += 1 # if there is data for that team for that week, add it to the sum
+                bias1_a += week_data["bias1(v, t)"].sum()
+                bias2_a += week_data["bias2(v, t)"].sum()
+                bias3_a += week_data["bias3(v, t)"].sum()
+                bias1_c += week_data["bias1(v, t)"].sum()
+                bias2_c += week_data["bias2(v, t)"].sum()
+                bias3_c += week_data["bias3(v, t)"].sum()
+        
+        # find averages of each bias counter
+        if (fh_rank_counter + sh_rank_counter) > 0:
+            bias1_a = bias1_a / (fh_rank_counter + sh_rank_counter)
+            bias2_a = bias2_a / (fh_rank_counter + sh_rank_counter)
+            bias3_a = bias3_a / (fh_rank_counter + sh_rank_counter)
+        
+        if fh_rank_counter > 0:
+            bias1_b = bias1_b / fh_rank_counter
+            bias2_b = bias2_b / fh_rank_counter
+            bias3_b = bias3_b / fh_rank_counter
+        
+        if sh_rank_counter > 0:
+            bias1_c = bias1_c / sh_rank_counter
+            bias2_c = bias2_c / sh_rank_counter
+            bias3_c = bias3_c / sh_rank_counter
+        
+        new_row = {
+            'season': int(season),
+            'voter': pollster,
+            'team': team,
+            'bias1-a': bias1_a,
+            'bias2-a': bias2_a,
+            'bias3-a': bias3_a,
+            'bias1-b': bias1_b,
+            'bias2-b': bias2_b,
+            'bias3-b': bias3_b,
+            'bias1-c': bias1_c,
+            'bias2-c': bias2_c,
+            'bias3-c': bias3_c,
+        }
+        df_biases.loc[len(df_biases)] = new_row    
+
+    df_biases = df_biases.sort_values(['season', 'voter']).reset_index(drop=True)
+    df_biases.to_csv("average_biases.csv", index=False)
+    return df_biases
+
 if __name__ == "__main__":
     #df_rankings = create_cam_rankings("original_data/college_basketball_polls_original.csv")
-    df_voters = create_teams("/Users/albertbogdan/IML-FALL2025---Voter-Bias/original_data/college_basketball_polls_original.csv")
+    #df_voters = create_teams("/Users/albertbogdan/IML-FALL2025---Voter-Bias/original_data/college_basketball_polls_original.csv")
+    create_vt_biases("/Users/albertbogdan/IML-FALL2025---Voter-Bias/output_data/cfb/master_bias_file_cfb.csv")
