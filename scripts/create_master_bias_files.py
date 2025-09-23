@@ -50,5 +50,5 @@ merge2["bias3(v, t)"] = (merge2["Rank"] - merge2["median"]) / merge2[["Rank", "m
 merge2 = merge2.rename(columns = {'Team' : 'Team (t)', 'Pollster' : 'Pollster (v)'})
 
 
-# merge.to_csv('master_bias_file_cfb.csv', index = False)
-# merge2.to_csv('master_bias_file_cbb.csv', index = False)
+# merge.to_csv('cfb_master_bias_file.csv', index = False)
+# merge2.to_csv('cbb_master_bias_file.csv', index = False)
