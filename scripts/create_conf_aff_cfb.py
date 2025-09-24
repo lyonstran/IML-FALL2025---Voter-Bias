@@ -1,3 +1,23 @@
+import pandas as pd
+import time
+
+def standardize_conference_name(conf: str) -> str:
+    if pd.isna(conf):
+        return None
+    conf = (
+        conf.lower()
+        .replace(" ", "-")
+        .replace("&", "and")
+        .replace("(", "")
+        .replace(")", "")
+        .replace(".", "")
+        .replace("'", "")
+    )
+    for suffix in ["-east", "-west", "-north", "-south"]:
+        if conf.endswith(suffix):
+            conf = conf.replace(suffix, "")
+    return conf
+
 def process_poll_data_cfb(df, year):
     season_df = df[df["Season"] == str(year)]
     long_df = season_df.melt(
