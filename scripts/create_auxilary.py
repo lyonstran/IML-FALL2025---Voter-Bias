@@ -211,6 +211,8 @@ def create_vt_biases(csv_path: str):
         df_biases.loc[len(df_biases)] = new_row    
 
     df_biases = df_biases.sort_values(['season', 'voter']).reset_index(drop=True)
+    numeric_columns = ['bias1-a', 'bias1-b', 'bias1-c', 'bias2-a', 'bias2-b', 'bias2-c', 'bias3-a', 'bias3-b', 'bias3-c'] # round
+    df_biases[numeric_columns] = df_biases[numeric_columns].round(4)
     df_biases.to_csv("average_biases.csv", index=False)
     return df_biases
 
@@ -238,6 +240,8 @@ def biases_summary_by_week(csv_path: str):
             'bias3_std': std_3,
         }
         df_biases.loc[len(df_biases)] = new_row   
+    numeric_columns = ['bias1_mean', 'bias1_std', 'bias2_mean', 'bias2_std', 'bias3_mean', 'bias3_std'] # round
+    df_biases[numeric_columns] = df_biases[numeric_columns].round(4)
     df_biases.to_csv("summary_stats_by_week.csv", index=False)
     df_biases = df_biases.sort_values(['season', 'week']).reset_index(drop=True)
     return df_biases
@@ -266,7 +270,9 @@ def biases_summary_by_team(csv_path: str):
             'bias3_mean': mean_3,
             'bias3_std': std_3,
         }
-        df_biases.loc[len(df_biases)] = new_row   
+        df_biases.loc[len(df_biases)] = new_row
+    numeric_columns = ['bias1_mean', 'bias1_std', 'bias2_mean', 'bias2_std', 'bias3_mean', 'bias3_std'] # round
+    df_biases[numeric_columns] = df_biases[numeric_columns].round(4)   
     df_biases.to_csv("average_biases.csv", index=False)
     df_biases = df_biases.sort_values(['season', 'team']).reset_index(drop=True)
     return df_biases
@@ -296,6 +302,8 @@ def biases_summary_by_voter(csv_path: str):
             'bias3_std': std_3,
         }
         df_biases.loc[len(df_biases)] = new_row   
+    numeric_columns = ['bias1_mean', 'bias1_std', 'bias2_mean', 'bias2_std', 'bias3_mean', 'bias3_std'] # round
+    df_biases[numeric_columns] = df_biases[numeric_columns].round(4)
     df_biases.to_csv("ss_stats_voter.csv", index=False)
     df_biases = df_biases.sort_values(['season', 'voter']).reset_index(drop=True)
     return df_biases
@@ -303,4 +311,4 @@ def biases_summary_by_voter(csv_path: str):
 if __name__ == "__main__":
     #df_rankings = create_cam_rankings("original_data/college_basketball_polls_original.csv")
     #df_voters = create_teams("/Users/albertbogdan/IML-FALL2025---Voter-Bias/original_data/college_basketball_polls_original.csv")
-    biases_summary_by_voter("/Users/albertbogdan/IML-FALL2025---Voter-Bias/output_data/cfb/master_bias_file_cfb.csv")
+    biases_summary_by_voter("/Users/albertbogdan/IML-FALL2025---Voter-Bias/output_data/cfb/cfb_master_bias_file.csv")
