@@ -330,7 +330,7 @@ def create_season_voter_conference_biases(average_biases_csv, cfb_csv: str):
         how='left'
     )
     df_ab = df_ab.drop(columns=['Season', 'Team'])
-    df_ab = df_ab.groupby(['season', 'Conference'], sort=False).agg({'bias1-a': 'mean', 'bias1-b': 'mean', 'bias1-c': 'mean', 'bias2-a': 'mean', 'bias2-b': 'mean', 'bias2-c': 'mean', 'bias3-a': 'mean', 'bias3-b': 'mean', 'bias3-c': 'mean',}).reset_index()
+    df_ab = df_ab.groupby(['voter','season', 'Conference'], sort=False).agg({'bias1-a': 'mean', 'bias1-b': 'mean', 'bias1-c': 'mean', 'bias2-a': 'mean', 'bias2-b': 'mean', 'bias2-c': 'mean', 'bias3-a': 'mean', 'bias3-b': 'mean', 'bias3-c': 'mean',}).reset_index()
 
     df_ab.to_csv("season_voter_conference_biases.csv", index=False)
     return df_ab
@@ -345,7 +345,7 @@ def create_voter_conference_biases(average_biases_csv, cfb_csv: str):
         how='left'
     )
     df_ab = df_ab.drop(columns=['Season', 'Team'])
-    df_ab = df_ab.groupby(['Conference'], sort=False).agg({'bias1-a': 'mean', 'bias1-b': 'mean', 'bias1-c': 'mean', 'bias2-a': 'mean', 'bias2-b': 'mean', 'bias2-c': 'mean', 'bias3-a': 'mean', 'bias3-b': 'mean', 'bias3-c': 'mean',}).reset_index()
+    df_ab = df_ab.groupby(['voter','Conference'], sort=False).agg({'bias1-a': 'mean', 'bias1-b': 'mean', 'bias1-c': 'mean', 'bias2-a': 'mean', 'bias2-b': 'mean', 'bias2-c': 'mean', 'bias3-a': 'mean', 'bias3-b': 'mean', 'bias3-c': 'mean',}).reset_index()
 
     df_ab.to_csv("voter_conference_biases.csv", index=False)
     return df_ab
@@ -355,4 +355,4 @@ def create_voter_conference_biases(average_biases_csv, cfb_csv: str):
 if __name__ == "__main__":
     #df_rankings = create_cam_rankings("original_data/college_basketball_polls_original.csv")
     #df_voters = create_teams("/Users/albertbogdan/IML-FALL2025---Voter-Bias/original_data/college_basketball_polls_original.csv")
-    create_season_voter_conference_biases("/Users/albertbogdan/IML-FALL2025---Voter-Bias/output_data/cfb/average_biases/cfb_average_biases.csv", "/Users/albertbogdan/IML-FALL2025---Voter-Bias/output_data/cfb/cfb_conf_aff.csv")
+    create_voter_conference_biases("/Users/albertbogdan/IML-FALL2025---Voter-Bias/output_data/cfb/average_biases/cfb_average_biases.csv", "/Users/albertbogdan/IML-FALL2025---Voter-Bias/output_data/cfb/cfb_conf_aff.csv")
