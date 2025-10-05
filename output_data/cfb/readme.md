@@ -57,7 +57,7 @@ This dataset records the list of pollsters that participated in the top 25 Colle
 - median: median rank of calculated AP rank for said team for that given week
  
 #### Biases were calculated using the spearman distance formula:  
-\frac{r(v, t) - r#(t)}{min(r(v, t) - r#(t))}
+$$\frac{r(v, t) - r#(t)}{min(r(v, t) - r#(t))}$$
 - bias1(v, t): ... (mention equation used)
 - bias2(v, t): ... (mention equation used)
 - bias3(v, t): ... (mention equation used)
