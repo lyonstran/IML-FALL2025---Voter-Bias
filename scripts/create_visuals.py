@@ -22,7 +22,7 @@ def graph_weekly_bias_mean(input_csv: str):
     plt.xlabel('Week', fontsize=12) 
     
     plt.title('Voter Bias Measurements', fontsize=16, fontweight='bold')
-    plt.xlabel('Year (marked at Week 1)', fontsize=12)
+    plt.xlabel('Week', fontsize=12)
     plt.ylabel('Bias (mean)', fontsize=12)
     plt.legend(fontsize=10)
     plt.grid(True, alpha=0.3)
@@ -46,7 +46,7 @@ def graph_weekly_bias_std(input_csv: str):
     plt.xlabel('Week', fontsize=12) 
     
     plt.title('Voter Bias Measurements', fontsize=16, fontweight='bold')
-    plt.xlabel('Year (marked at Week 1)', fontsize=12)
+    plt.xlabel('Week)', fontsize=12)
     plt.ylabel('Bias (std)', fontsize=12)
     plt.legend(fontsize=10)
     plt.grid(True, alpha=0.3)
@@ -134,6 +134,111 @@ def graph_voter_bias_mean(input_csv: str):
     plt.tight_layout()
     plt.savefig('cfb_ss_voter_visual_mean.png')
 
+def create_percentile_graph(input_csv: str):
+    df = pd.read_csv(input_csv)
+    df = df.reset_index(drop=True)
+    df['plot_index'] = range(len(df)) # x values be all the weeks 
+    
+    plt.figure(figsize=(16, 8))
+    
+    plt.plot(df['plot_index'], df['bias1(p)'], 'o-', label='AP Rank', linewidth=2, markersize=3) # set up the lines
+    plt.plot(df['plot_index'], df['bias2(p)'], 's-', label='Mean', linewidth=2, markersize=3)
+    plt.plot(df['plot_index'], df['bias3(p)'], '^-', label='Median', linewidth=2, markersize=3)
+   
+    tick_positions = [i for i in range(len(df)) if df.loc[i, 'Percentile'] in [1, 10, 20, 30, 40, 50, 60, 70, 80, 90, 99]]
+    tick_labels = [1, 10, 20, 30, 40, 50, 60, 70, 80, 90, 99]
+    plt.xticks(tick_positions, tick_labels)
+    
+    plt.title('Voter Bias Measurements', fontsize=16, fontweight='bold')
+    plt.xlabel('Percentile', fontsize=12)
+    plt.ylabel('Bias (mean)', fontsize=12)
+    plt.legend(fontsize=10)
+    plt.grid(True, alpha=0.3)
+    plt.tight_layout()
+    plt.savefig('avg_percentile.png') 
+
+def create_svc_graph(input_csv: str):
+    df = pd.read_csv(input_csv)
+    df = df.reset_index(drop=True)
+    
+    df_grouped = df.groupby('Conference').agg({'bias1-a': 'mean'}).reset_index()
+    df_grouped = df_grouped.sort_values('bias1-a')  # sort by bias value
+    
+    plt.figure(figsize=(14, 8))
+    
+    bars = plt.bar(df_grouped['Conference'], df_grouped['bias1-a'], 
+                   color='steelblue', edgecolor='black', linewidth=1.2)
+    
+    for i, bar in enumerate(bars):
+        if df_grouped.iloc[i]['bias1-a'] < 0:
+            bar.set_color('indianred')
+        else:
+            bar.set_color('mediumseagreen')
+    
+    plt.axhline(y=0, color='black', linestyle='-', linewidth=0.8)
+    
+    plt.title('AP Rank Bias by Conference', fontsize=16, fontweight='bold')
+    plt.xlabel('Conference', fontsize=12)
+    plt.ylabel('Bias (mean)', fontsize=12)
+    plt.xticks(rotation=45, ha='right')
+    plt.grid(True, alpha=0.3, axis='y')
+    plt.tight_layout()
+    plt.savefig('conference_bias.png')
+
+def create_voterteam_pair(input_csv: str):
+    df = pd.read_csv(input_csv)
+    df = df.sort_values('bias1-a')
+    
+    bottom_5 = df.head(10)
+    top_5 = df.tail(10)
+    df_plot = pd.concat([bottom_5, top_5])
+    
+    df_plot['label'] = df_plot['voter'] + ' - ' + df_plot['team']
+    
+    plt.figure(figsize=(14, 10))
+    
+    bars = plt.barh(df_plot['label'], df_plot['bias1-a'], edgecolor='black', linewidth=1)
+    
+    colors = ['indianred' if x < 0 else 'mediumseagreen' for x in df_plot['bias1-a']]
+    for bar, color in zip(bars, colors):
+        bar.set_color(color)
+    
+    plt.axvline(x=0, color='black', linestyle='-', linewidth=1.5)
+    plt.title('Top 10 and Bottom 10 Voter-Team Pairs by AP Rank Bias', fontsize=16, fontweight='bold')
+    plt.xlabel('Bias (avg)', fontsize=12)
+    plt.ylabel('Voter/Team', fontsize=12)
+    plt.grid(True, alpha=0.3, axis='x')
+    plt.tight_layout()
+    plt.savefig('voterteam_bias.png')
+
+def create_seasonteam_pair(input_csv: str):
+    df = pd.read_csv(input_csv)
+    df = df.sort_values('bias1-a')
+    
+    bottom_5 = df.head(10)
+    top_5 = df.tail(10)
+    df_plot = pd.concat([bottom_5, top_5])
+    
+    df_plot['label'] = df_plot['season'].astype(str) + ' - ' + df_plot['team']
+    
+    plt.figure(figsize=(14, 10))
+    
+    bars = plt.barh(df_plot['label'], df_plot['bias1-a'], edgecolor='black', linewidth=1)
+    
+    colors = ['indianred' if x < 0 else 'mediumseagreen' for x in df_plot['bias1-a']]
+    for bar, color in zip(bars, colors):
+        bar.set_color(color)
+    
+    plt.axvline(x=0, color='black', linestyle='-', linewidth=1.5)
+    plt.title('Top 10 and Bottom 10 Season-Team Pairs by AP Rank Bias', fontsize=16, fontweight='bold')
+    plt.xlabel('Bias (avg)', fontsize=12)
+    plt.ylabel('Season/Team', fontsize=12)
+    plt.grid(True, alpha=0.3, axis='x')
+    plt.tight_layout()
+    plt.savefig('seasonteam_bias.png')
+
+
 
 if __name__ == "__main__":
-    graph_voter_bias("/Users/albertbogdan/IML-FALL2025---Voter-Bias/output_data/cfb/summary_stats/cfb_ss_voter.csv")
+    #graph_weekly_bias("/Users/albertbogdan/IML-FALL2025---Voter-Bias/output_data/cfb/summary_stats/cfb_ss_week.csv")
+    create_seasonteam_pair("/Users/albertbogdan/IML-FALL2025---Voter-Bias/output_data/cfb/average_biases/season_team_biases.csv")
