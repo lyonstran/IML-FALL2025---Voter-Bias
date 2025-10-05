@@ -1,15 +1,15 @@
 # College Football Datasets README
 ## This folder contains the following CSV files:
 
-- cfb_teams
-- cfb_teams_summary
-- cfb_voters
-- cfb_voters_summary
-- cfb_master_bias_file
-- cfb_conf_aff
-- cfb_average_biases
+- `cfb_teams`
+- `cfb_teams_summary`
+- `cfb_voters`
+- `cfb_voters_summary`
+- `cfb_master_bias_file`
+- `cfb_conf_aff`
+- `cfb_average_biases`
 
-### cfb_teams
+### `cfb_teams`
 <b>Columns:</b>
 
 - year: year of corresponding season
@@ -18,7 +18,7 @@
 
 This dataset records the list of teams that have appeared in the top 25 College Football AP polls over time, keyed by year and week. 
 
-### cfb_teams_summary
+### `cfb_teams_summary`
 <b>Columns:</b>
 
 - Team: list of school/teams that appeared in the AP poll (team names are standardized to be lowercased and hyphenated)
@@ -27,7 +27,7 @@ This dataset records the list of teams that have appeared in the top 25 College 
 
 This dataset records the list of teams that have appeared in the top 25 College Football AP polls over time, recording number of appearances and average rank in the polls. 
 
-### cfb_voters
+### `cfb_voters`
 <b>Columns:</b>
 
 - year: year of corresponding season
@@ -36,7 +36,7 @@ This dataset records the list of teams that have appeared in the top 25 College 
 
 This dataset records the list of pollsters that participated in the top 25 College Football AP polls over time, keyed by year and week. 
 
-### cfb_voters_summary
+### `cfb_voters_summary`
 <b>Columns:</b>
 
 - Voter: list of pollsters that participated in the AP poll for said week
@@ -44,7 +44,7 @@ This dataset records the list of pollsters that participated in the top 25 Colle
 
 This dataset records the list of pollsters that participated in the top 25 College Football AP polls over time, and how many times they've appeared. 
 
-### cfb_master_bias_file
+### `cfb_master_bias_file`
 <b>Columns:</b>
 
 - Pollster (v): voter name correspoding to row recording their vote 
@@ -56,16 +56,35 @@ This dataset records the list of pollsters that participated in the top 25 Colle
 - average: average rank of calculated AP rank for said team for that given week
 - median: median rank of calculated AP rank for said team for that given week
  
-#### Biases were calculated using the spearman distance formula:  
-$\frac{r(v, t) - r#(t)}{min(r(v, t) - r#(t))}$
-- bias1(v, t): ... (mention equation used)
-- bias2(v, t): ... (mention equation used)
-- bias3(v, t): ... (mention equation used)
+<b>The bias columns were calculated using the weighted Spearman distance formula:</b>
+
+$$
+\text{bias}_{\text{number}}(v, t) = \frac{r(v, t) - r_{\text{number}}(t)}{\min\big(r(v, t), r_{\text{number}}(t)\big)}, \quad 
+\text{where r(v,t) is the rank given by voter v for team t}
+$$
+ 
+
+- bias1(v, t): 
+$$
+\text{bias}_1(v, t) = \frac{r(v, t) - r_1(t)}{\min\big(r(v, t) - r_1(t)\big)}, \quad r_1(t) = \text{AP rank}
+$$
+
+- bias2(v, t): 
+$$
+\text{bias}_2(v, t) = \frac{r(v, t) - r_2(t)}{\min\big(r(v, t) - r_2(t)\big)}, \quad r_2(t) = \text{Mean rank}
+$$
+- bias3(v, t):
+$$
+\text{bias}_3(v, t) = \frac{r(v, t) - r_3(t)}{\min\big(r(v, t) - r_3(t)\big)}, \quad r_3(t) = \text{Median rank}
+$$
 
 
-
-### cfb_conf_aff
+### `cfb_conf_aff`
 <b>Columns:</b>
 
-### cfb_average_biases
-<b>Columns:</b>
+- Season: season year
+- week: AP poll week number in the season
+- Team: The team being ranked
+- Conference: Given team's conference in that week/season
+- Total_points: Total points earned that week
+
