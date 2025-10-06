@@ -38,16 +38,17 @@ def graph_weekly_bias_std(input_csv: str):
     
     plt.figure(figsize=(16, 8))
     
-    plt.plot(df['plot_index'], df['bias1_std'], 'o-', label='AP Rank', linewidth=2, markersize=3) # set up the lines
-    plt.plot(df['plot_index'], df['bias2_std'], 's-', label='Mean', linewidth=2, markersize=3)
-    plt.plot(df['plot_index'], df['bias3_std'], '^-', label='Median', linewidth=2, markersize=3)
+    plt.plot(df['plot_index'], df['bias1_std'], 'o-', linewidth=4, markersize=3) # set up the lines
+    # plt.plot(df['plot_index'], df['bias2_std'], 's-', label='Mean', linewidth=2, markersize=3)
+    # plt.plot(df['plot_index'], df['bias3_std'], '^-', label='Median', linewidth=2, markersize=3)
    
     plt.xticks(df['plot_index'], df['week'])  
     plt.xlabel('Week', fontsize=12) 
     
-    plt.title('Voter Bias Measurements', fontsize=16, fontweight='bold')
-    plt.xlabel('Week)', fontsize=12)
-    plt.ylabel('Bias (std)', fontsize=12)
+    plt.xticks(fontsize=23) 
+    plt.yticks(fontsize=14) 
+    plt.xlabel('Week', fontsize=23)
+    plt.ylabel('Standard Deviation of Bias', fontsize=14)
     plt.legend(fontsize=10)
     plt.grid(True, alpha=0.3)
     plt.tight_layout()
@@ -208,10 +209,10 @@ def create_voterteam_pair(input_csv: str, master_csv: str, min_votes: int = 500)
     for bar, color in zip(bars, colors):
         bar.set_color(color)
     
+    plt.xticks(fontsize=21) 
+    plt.yticks(fontsize=14) 
     plt.axvline(x=0, color='black', linestyle='-', linewidth=1.5)
-    plt.title(f'Top/bottom 5 voter team pairs by AP Rank Bias (voters with ≥{min_votes} total votes)', 
-              fontsize=16, fontweight='bold')
-    plt.xlabel('Bias (avg)', fontsize=12)
+    plt.xlabel('Bias', fontsize=21)
     plt.ylabel('Voter/Team', fontsize=12)
     plt.grid(True, alpha=0.3, axis='x')
     plt.tight_layout()
@@ -235,9 +236,10 @@ def create_seasonteam_pair(input_csv: str):
     for bar, color in zip(bars, colors):
         bar.set_color(color)
     
+    plt.xticks(fontsize=21) 
+    plt.yticks(fontsize=14) 
     plt.axvline(x=0, color='black', linestyle='-', linewidth=1.5)
-    plt.title('Top/bottom 5 season-team pairs', fontsize=16, fontweight='bold')
-    plt.xlabel('Average Bias', fontsize=12)
+    plt.xlabel('Bias', fontsize=21)
     plt.ylabel('Season/Team', fontsize=12)
     plt.grid(True, alpha=0.3, axis='x')
     plt.tight_layout()
@@ -285,5 +287,5 @@ def graph_weekly_mean_bias_boxplot(input_csv: str):
     plt.close()
 
 if __name__ == "__main__":
-    #graph_weekly_mean_bias_boxplot("/Users/albertbogdan/IML-FALL2025---Voter-Bias/output_data/cfb/summary_stats/cfb_ss_week.csv")
-    create_voterteam_pair("/Users/albertbogdan/IML-FALL2025---Voter-Bias/output_data/cfb/average_biases/voter_team_biases.csv", "/Users/albertbogdan/IML-FALL2025---Voter-Bias/output_data/cfb/cfb_master_bias_file.csv")
+    graph_weekly_bias_std("/Users/albertbogdan/IML-FALL2025---Voter-Bias/output_data/cfb/summary_stats/cfb_ss_week.csv")
+    #create_seasonteam_pair("/Users/albertbogdan/IML-FALL2025---Voter-Bias/output_data/cfb/average_biases/season_team_biases.csv")
