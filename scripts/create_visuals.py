@@ -185,26 +185,32 @@ def create_svc_graph(input_csv: str):
     plt.tight_layout()
     plt.savefig('conference_bias.png')
 
-def create_voterteam_pair(input_csv: str):
+def create_voterteam_pair(input_csv: str, master_csv: str, min_votes: int = 500):
+    analysis_df = pd.read_csv(master_csv)
+    voter_vote_counts = analysis_df.groupby('Pollster (v)').size().reset_index()
+    voter_vote_counts.columns = ['voter', 'total_votes']
+    # add the total votes as a column 
+    
     df = pd.read_csv(input_csv)
+    df = df.merge(voter_vote_counts, on='voter')
+    
+    df = df[df['total_votes'] >= min_votes]
+    
     df = df.sort_values('bias1-a')
-    
-    bottom_5 = df.head(10)
-    top_5 = df.tail(10)
+    bottom_5 = df.head(5)
+    top_5 = df.tail(5)
     df_plot = pd.concat([bottom_5, top_5])
-    
     df_plot['label'] = df_plot['voter'] + ' - ' + df_plot['team']
     
     plt.figure(figsize=(14, 10))
-    
     bars = plt.barh(df_plot['label'], df_plot['bias1-a'], edgecolor='black', linewidth=1)
-    
     colors = ['indianred' if x < 0 else 'mediumseagreen' for x in df_plot['bias1-a']]
     for bar, color in zip(bars, colors):
         bar.set_color(color)
     
     plt.axvline(x=0, color='black', linestyle='-', linewidth=1.5)
-    plt.title('Top 10 and Bottom 10 Voter-Team Pairs by AP Rank Bias', fontsize=16, fontweight='bold')
+    plt.title(f'Top/bottom 5 voter team pairs by AP Rank Bias (voters with ≥{min_votes} total votes)', 
+              fontsize=16, fontweight='bold')
     plt.xlabel('Bias (avg)', fontsize=12)
     plt.ylabel('Voter/Team', fontsize=12)
     plt.grid(True, alpha=0.3, axis='x')
@@ -215,8 +221,8 @@ def create_seasonteam_pair(input_csv: str):
     df = pd.read_csv(input_csv)
     df = df.sort_values('bias1-a')
     
-    bottom_5 = df.head(10)
-    top_5 = df.tail(10)
+    bottom_5 = df.head(5)
+    top_5 = df.tail(5)
     df_plot = pd.concat([bottom_5, top_5])
     
     df_plot['label'] = df_plot['season'].astype(str) + ' - ' + df_plot['team']
@@ -230,15 +236,54 @@ def create_seasonteam_pair(input_csv: str):
         bar.set_color(color)
     
     plt.axvline(x=0, color='black', linestyle='-', linewidth=1.5)
-    plt.title('Top 10 and Bottom 10 Season-Team Pairs by AP Rank Bias', fontsize=16, fontweight='bold')
-    plt.xlabel('Bias (avg)', fontsize=12)
+    plt.title('Top/bottom 5 season-team pairs', fontsize=16, fontweight='bold')
+    plt.xlabel('Average Bias', fontsize=12)
     plt.ylabel('Season/Team', fontsize=12)
     plt.grid(True, alpha=0.3, axis='x')
     plt.tight_layout()
     plt.savefig('seasonteam_bias.png')
 
+import numpy as np
+def graph_weekly_ap_bias_boxplot(input_csv: str):
+    df = pd.read_csv(input_csv)
+    fig, axes = plt.subplots(1, 1, figsize=(20, 6))
+    
+    weeks = sorted(df['week'].unique())
+    bias1_data = [df[df['week'] == week]['bias1_mean'].dropna().values for week in weeks]
+    
+    bp1 = axes.boxplot(bias1_data, labels=weeks, patch_artist=True)
+    axes.set_title('AP Rank Bias', fontsize=14, fontweight='bold')
+    axes.set_xlabel('Week', fontsize=12)
+    axes.set_ylabel('Bias', fontsize=12)
+    axes.grid(True, alpha=0.3)
 
+    for patch in bp1['boxes']:
+        patch.set_facecolor('lightblue')
+    
+    plt.tight_layout()
+    plt.savefig('ap_weekly_boxplot.png')
+    plt.close()
+
+def graph_weekly_mean_bias_boxplot(input_csv: str):
+    df = pd.read_csv(input_csv)
+    fig, axes = plt.subplots(1, 1, figsize=(20, 6))
+    
+    weeks = sorted(df['week'].unique())
+    bias1_data = [df[df['week'] == week]['bias2_mean'].dropna().values for week in weeks]
+    
+    bp1 = axes.boxplot(bias1_data, labels=weeks, patch_artist=True)
+    axes.set_title('Mean Bias', fontsize=14, fontweight='bold')
+    axes.set_xlabel('Week', fontsize=12)
+    axes.set_ylabel('Bias', fontsize=12)
+    axes.grid(True, alpha=0.3)
+
+    for patch in bp1['boxes']:
+        patch.set_facecolor('lightblue')
+    
+    plt.tight_layout()
+    plt.savefig('mean_weekly_boxplot.png')
+    plt.close()
 
 if __name__ == "__main__":
-    #graph_weekly_bias("/Users/albertbogdan/IML-FALL2025---Voter-Bias/output_data/cfb/summary_stats/cfb_ss_week.csv")
-    create_seasonteam_pair("/Users/albertbogdan/IML-FALL2025---Voter-Bias/output_data/cfb/average_biases/season_team_biases.csv")
+    #graph_weekly_mean_bias_boxplot("/Users/albertbogdan/IML-FALL2025---Voter-Bias/output_data/cfb/summary_stats/cfb_ss_week.csv")
+    create_voterteam_pair("/Users/albertbogdan/IML-FALL2025---Voter-Bias/output_data/cfb/average_biases/voter_team_biases.csv", "/Users/albertbogdan/IML-FALL2025---Voter-Bias/output_data/cfb/cfb_master_bias_file.csv")
