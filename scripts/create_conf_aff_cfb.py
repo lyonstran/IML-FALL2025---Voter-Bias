@@ -76,6 +76,141 @@ def process_all_years_cfb(df):
     all_years_df = pd.concat(all_dfs, ignore_index = True)
     return all_years_df
 
-#example:
-# ret1 = process_all_years_cfb(df)
-# ret1.to_csv('cfb_conf_aff.csv', index = False)
+### manual data cleaning and entry:
+
+df = pd.read_csv(r'C:\Users\lyons\OneDrive\Desktop\IML-FALL2025---Voter-Bias\output_data\cfb\cfb_conf_aff.csv')
+
+tmc_2014 = df[df["Season"] == 2014][df["Conference"].isna()]["Team"].unique().tolist()
+tmc_2015 = df[df["Season"] == 2015][df["Conference"].isna()]["Team"].unique().tolist()
+tmc_2016 = df[df["Season"] == 2016][df["Conference"].isna()]["Team"].unique().tolist()
+tmc_2017 = df[df["Season"] == 2017][df["Conference"].isna()]["Team"].unique().tolist()
+tmc_2018 = df[df["Season"] == 2018][df["Conference"].isna()]["Team"].unique().tolist()
+tmc_2019 = df[df["Season"] == 2019][df["Conference"].isna()]["Team"].unique().tolist()
+tmc_2020 = df[df["Season"] == 2020][df["Conference"].isna()]["Team"].unique().tolist()
+tmc_2021 = df[df["Season"] == 2021][df["Conference"].isna()]["Team"].unique().tolist()
+tmc_2022 = df[df["Season"] == 2022][df["Conference"].isna()]["Team"].unique().tolist()
+tmc_2023 = df[df["Season"] == 2023][df["Conference"].isna()]["Team"].unique().tolist()
+tmc_2024 = df[df["Season"] == 2024][df["Conference"].isna()]["Team"].unique().tolist() 
+
+mtm_2014 = {
+    'michigan-wolverines' : 'big-ten',
+    'tcu-horned-frogs' : 'big-12',
+    'texas-longhorns' : 'big-12',
+    'arizona-wildcats' : 'pac-12',
+    'north-dakota-state-bison' : 'mvfc',
+    'utah-utes' : 'pac-12',
+    'virginia-cavaliers' : 'acc'
+}
+
+mtm_2015 = {
+    'arizona-wildcats' : 'pac-12',
+    'michigan-wolverines' : 'big-ten',
+    'tcu-horned-frogs' : 'big-12',
+    'texas-longhorns' : 'big-12',
+    'north-carolina-tar-heels' : 'acc'
+}
+
+mtm_2016 = {
+    'michigan-wolverines' : 'big-ten',
+    'tcu-horned-frogs' : 'big-12',
+    'texas-longhorns' : 'big-12',
+    'north-dakota-state-bison' : 'mvfc',
+    'southern-methodist-mustangs' : 'american' 
+}
+
+mtm_2017 = {
+    'michigan-wolverines': 'big-ten',
+    'tcu-horned-frogs' : 'big-12',
+    'texas-longhorns' : 'big-12',
+    'iowa-hawkeyes' : 'big-ten',
+    'virginia-cavaliers' : 'acc'
+}
+
+mtm_2018 = {
+    'florida-gators' : 'sec',
+    'michigan-wolverines' : 'big-ten',
+    'tcu-horned-frogs' : 'big-12',
+    'texas-longhorns' : 'big-12',
+    'virginia-cavaliers' : 'acc'
+}
+
+mtm_2019 = {
+    'arizona-wildcats' : 'pac-12',
+    'michigan-wolverines' : 'big-ten',
+    'tcu-horned-frogs' : 'big-12',
+    'texas-longhorns' : 'big-12',
+    'utah-utes' : 'pac-12',
+    'north-dakota-state-bison' : 'mvfc',
+    'southern-methodist-mustangs' : 'american',
+    'louisiana-lafayette-ragin-cajuns' : 'sbc'
+}
+
+mtm_2020 = {
+    'southern-methodist-mustangs' : 'american',
+    'tcu-horned-frogs' : 'big-12',
+    'texas-longhorns' : 'big-12',
+    'north-dakota-state-bison' : 'mvfc',
+    'arkansas-razorbacks' : 'sec'
+}
+
+mtm_2021 = {
+    'north-carolina-tar-heels' : 'acc',
+    'tcu-horned-frogs' : 'big-12',
+    'texas-longhorns' : 'big-12',
+    'southern-methodist-mustangs' : 'american',
+    'virginia-cavaliers' : 'acc'
+}
+
+mtm_2022 = {
+    'michigan-wolverines' : 'big-ten',
+    'north-carolina-tar-heels' : 'acc',
+    'texas-longhorns' : 'big-12',
+    'utah-utes' : 'pac-12',
+    'tcu-horned-frogs' : 'big-12',
+    'kansas-jayhawks' : 'big-12',
+    'ohio-bobcats' : 'mac'
+}
+
+mtm_2023 = {
+    'north-carolina-tar-heels' : 'acc',
+    'tcu-horned-frogs' : 'big-12',
+    'texas-longhorns' : 'big-12',
+    'kansas-jayhawks' : 'big-12',
+    'southern-methodist-mustangs' : 'american',
+    'unlv-rebels' : 'mwc',
+    'ohio-bobcats' : 'mac'
+}
+
+mtm_2024 = {
+    'southern-methodist-mustangs' : 'acc',
+    'texas-longhorns' : 'sec',
+    'north-carolina-tar-heels' : 'acc',
+    'unlv-rebels' : 'mwc',
+    'tcu-horned-frogs' : 'big-12'
+}
+
+manual_maps = {
+    2014: mtm_2014, 
+    2015: mtm_2015, 
+    2016: mtm_2016, 
+    2017: mtm_2017,
+    2018: mtm_2018, 
+    2019: mtm_2019, 
+    2020: mtm_2020, 
+    2021: mtm_2021,
+    2022: mtm_2022, 
+    2023: mtm_2023, 
+    2024: mtm_2024
+}
+for year, mapping in manual_maps.items():
+    mask = (df["Season"] == year) & (df["Conference"].isna())
+    df.loc[mask, "Conference"] = df.loc[mask, "Team"].map(mapping)
+
+df = df[df["Conference"] != "ind"]
+df["Conference"] = df["Conference"].replace({
+    "mwc-mountain": "mwc",
+    "acc-atlantic": "acc",
+    "acc-coastal": "acc"
+})
+
+#df.to_csv('cfb_conf_aff.csv')
