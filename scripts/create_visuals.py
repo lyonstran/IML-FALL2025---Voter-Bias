@@ -163,7 +163,23 @@ def create_svc_graph(input_csv: str):
     df = df.reset_index(drop=True)
     
     df_grouped = df.groupby('Conference').agg({'bias1-a': 'mean'}).reset_index()
+    # df_grouped["Conference" == 'SEC'] = df_grouped[df_grouped["Conference"] == 'sec']
+    # df_grouped['BIG 10'] = df_grouped[df_grouped["Conference"] == 'big-ten']
+    # df_grouped['MAC'] = df_grouped[df_grouped["Conference"] == 'mac']
+    # df_grouped['ACC'] = df_grouped['acc']
+    # df_grouped['BIG 12'] = df_grouped['big-12']
+    # df_grouped['PAC 12'] = df_grouped['pac-12']
+    # df_grouped['CUSA'] = df_grouped['cusa']
+    # df_grouped['AMERICAN'] = df_grouped['american']
+    # df_grouped['MWC'] = df_grouped['mwc']
+    # df_grouped['SUN BELT'] = df_grouped['sun-belt']
+
     df_grouped = df_grouped.sort_values('bias1-a')  # sort by bias value
+    # df_grouped = df_grouped[df_grouped['Conference'] != "mvfc" & df_grouped['Conference'] != "sec" & df_grouped['Conference'] != "big-ten" & df_grouped['Conference'] != "mac" & df_grouped['Conference'] != "acc" & df_grouped['Conference'] != "big-12" & df_grouped['Conference'] != "pac-12" & df_grouped['Conference'] != "cusa" & df_grouped['Conference'] != "american" & df_grouped['Conference'] != "mwc" & df_grouped['Conference'] != "sun-belt"] 
+    df_grouped = df_grouped[df_grouped['Conference'] != "mvfc"]
+    print(df_grouped)
+    y_ticks = ['SEC', 'BIG 10', 'MAC', 'ACC', 'BIG 12', 'PAC 12', 'CUSA', 'AMERICAN', 'MWC', 'SUN BELT']
+    values = [9, 8, 7, 6, 5, 4, 3 ,2, 1, 0]
     
     plt.figure(figsize=(14, 8))
     
@@ -177,11 +193,11 @@ def create_svc_graph(input_csv: str):
             bar.set_color('mediumseagreen')
     
     plt.axvline(x=0, color='black', linestyle='-', linewidth=0.8)
-    
-    plt.xticks(fontsize=18) 
-    plt.yticks(fontsize=11) 
-    plt.xlabel('Conference', fontsize=21)
-    plt.ylabel('Bias (mean)', fontsize=14)
+
+    plt.xticks(fontsize=21) 
+    plt.yticks(values, y_ticks, fontsize=21) 
+    plt.ylabel('Conference', fontsize=21)
+    plt.xlabel('Bias', fontsize=21)
     plt.grid(True, alpha=0.3, axis='x')
     plt.tight_layout()
     plt.savefig('conference_bias.png')
@@ -288,4 +304,4 @@ def graph_weekly_mean_bias_boxplot(input_csv: str):
 
 if __name__ == "__main__":
     #graph_weekly_bias_std("/Users/albertbogdan/IML-FALL2025---Voter-Bias/output_data/cfb/summary_stats/cfb_ss_week.csv")
-    create_svc_graph("/Users/albertbogdan/IML-FALL2025---Voter-Bias/voter_conference_biases.csv")
+    create_svc_graph("/Users/albertbogdan/IML-FALL2025---Voter-Bias/output_data/cfb/average_biases/voter_conference_biases.csv")
