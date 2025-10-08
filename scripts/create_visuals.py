@@ -167,7 +167,7 @@ def create_svc_graph(input_csv: str):
     
     plt.figure(figsize=(14, 8))
     
-    bars = plt.bar(df_grouped['Conference'], df_grouped['bias1-a'], 
+    bars = plt.barh(df_grouped['Conference'], df_grouped['bias1-a'], 
                    color='steelblue', edgecolor='black', linewidth=1.2)
     
     for i, bar in enumerate(bars):
@@ -176,13 +176,13 @@ def create_svc_graph(input_csv: str):
         else:
             bar.set_color('mediumseagreen')
     
-    plt.axhline(y=0, color='black', linestyle='-', linewidth=0.8)
+    plt.axvline(x=0, color='black', linestyle='-', linewidth=0.8)
     
-    plt.title('AP Rank Bias by Conference', fontsize=16, fontweight='bold')
-    plt.xlabel('Conference', fontsize=12)
-    plt.ylabel('Bias (mean)', fontsize=12)
-    plt.xticks(rotation=45, ha='right')
-    plt.grid(True, alpha=0.3, axis='y')
+    plt.xticks(fontsize=18) 
+    plt.yticks(fontsize=11) 
+    plt.xlabel('Conference', fontsize=21)
+    plt.ylabel('Bias (mean)', fontsize=14)
+    plt.grid(True, alpha=0.3, axis='x')
     plt.tight_layout()
     plt.savefig('conference_bias.png')
 
@@ -287,5 +287,5 @@ def graph_weekly_mean_bias_boxplot(input_csv: str):
     plt.close()
 
 if __name__ == "__main__":
-    graph_weekly_bias_std("/Users/albertbogdan/IML-FALL2025---Voter-Bias/output_data/cfb/summary_stats/cfb_ss_week.csv")
-    #create_seasonteam_pair("/Users/albertbogdan/IML-FALL2025---Voter-Bias/output_data/cfb/average_biases/season_team_biases.csv")
+    #graph_weekly_bias_std("/Users/albertbogdan/IML-FALL2025---Voter-Bias/output_data/cfb/summary_stats/cfb_ss_week.csv")
+    create_svc_graph("/Users/albertbogdan/IML-FALL2025---Voter-Bias/voter_conference_biases.csv")
