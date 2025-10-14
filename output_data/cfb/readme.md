@@ -67,18 +67,18 @@ $$
 - bias1(v, t): 
 
 $$
-\text{bias}_1(v, t) = \frac{r(v, t) - r_1(t)}{\min\big(r(v, t) - r_1(t)\big)}, \quad r_1(t) = \text{AP rank}
+\text{bias}_1(v, t) = \frac{r(v, t) - r_1(t)}{\min\big(r(v, t) , r_1(t)\big)}, \quad r_1(t) = \text{AP rank}
 $$
 
 - bias2(v, t): 
 
 $$
-\text{bias}_2(v, t) = \frac{r(v, t) - r_2(t)}{\min\big(r(v, t) - r_2(t)\big)}, \quad r_2(t) = \text{Mean rank}
+\text{bias}_2(v, t) = \frac{r(v, t) - r_2(t)}{\min\big(r(v, t) , r_2(t)\big)}, \quad r_2(t) = \text{Mean rank}
 $$
 - bias3(v, t):
 
 $$
-\text{bias}_3(v, t) = \frac{r(v, t) - r_3(t)}{\min\big(r(v, t) - r_3(t)\big)}, \quad r_3(t) = \text{Median rank}
+\text{bias}_3(v, t) = \frac{r(v, t) - r_3(t)}{\min\big(r(v, t) , r_3(t)\big)}, \quad r_3(t) = \text{Median rank}
 $$
 
 
