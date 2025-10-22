@@ -82,6 +82,18 @@ $$
 \text{bias}_3(v, t) = \frac{r(v, t) - r_3(t)}{\min\big(r(v, t) , r_3(t)\big)}, \quad r_3(t) = \text{Median rank}
 $$
 
+- bias0(v, t)_ap:
+
+$$
+\text{bias}_0(v, t)_ap = \frac{r(v, t) , \quad r_3(t) = \text{unweighted AP rank}
+$$
+
+- bias0(v, t)_mean:
+
+$$
+\text{bias}_1(v, t)_mean = \frac{r(v, t) , \quad r_3(t) = \text{unweighted mean rank}
+$$
+
 
 ### `cfb_conf_aff.csv`
 <b>Columns:</b>

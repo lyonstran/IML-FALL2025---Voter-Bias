@@ -9,21 +9,18 @@ def graph_weekly_bias_mean(input_csv: str):
     df = pd.read_csv(input_csv)
     
     df = df.reset_index(drop=True)
-    df = df.groupby('week').agg({'bias1_mean': 'mean', 'bias1_std': 'mean', 'bias2_mean': 'mean', 'bias2_std': 'mean', 'bias3_mean': 'mean', 'bias3_std': 'mean'}).reset_index()
+    df = df.groupby('week').agg({'bias1_mean': 'mean', 'bias1_std': 'mean', 'bias2_mean': 'mean', 'bias2_std': 'mean', 'bias3_mean': 'mean', 'bias3_std': 'mean', 'bias0_ap_mean' : 'mean', 'bias0_ap_std' : 'mean', 'bias0_mean_mean' : 'mean', 'bias0_mean_std' : 'mean'}).reset_index()
     df['plot_index'] = range(len(df)) # x values be all the weeks 
     
     plt.figure(figsize=(16, 8))
     
-    plt.plot(df['plot_index'], df['bias1_mean'], 'o-', label='AP Rank', linewidth=2, markersize=3) # set up the lines
-    plt.plot(df['plot_index'], df['bias2_mean'], 's-', label='Mean', linewidth=2, markersize=3)
-    plt.plot(df['plot_index'], df['bias3_mean'], '^-', label='Median', linewidth=2, markersize=3)
+    plt.plot(df['plot_index'], df['bias0_ap_mean'], 'o-', label='AP', linewidth=4, markersize=3) # set up the lines
+    plt.plot(df['plot_index'], df['bias0_mean_mean'], 's-', label='Mean', linewidth=4, markersize=3)
    
-    plt.xticks(df['plot_index'], df['week'])  
-    plt.xlabel('Week', fontsize=12) 
-    
-    plt.title('Voter Bias Measurements', fontsize=16, fontweight='bold')
-    plt.xlabel('Week', fontsize=12)
-    plt.ylabel('Bias (mean)', fontsize=12)
+    plt.xticks(fontsize=23) 
+    plt.yticks(fontsize=14) 
+    plt.xlabel('Week', fontsize=23)
+    plt.ylabel('Average of Bias (Without Correction)', fontsize=14)
     plt.legend(fontsize=10)
     plt.grid(True, alpha=0.3)
     plt.tight_layout()
@@ -33,12 +30,14 @@ def graph_weekly_bias_std(input_csv: str):
     df = pd.read_csv(input_csv)
     
     df = df.reset_index(drop=True)
-    df = df.groupby('week').agg({'bias1_mean': 'mean', 'bias1_std': 'mean', 'bias2_mean': 'mean', 'bias2_std': 'mean', 'bias3_mean': 'mean', 'bias3_std': 'mean'}).reset_index()
+    df = df.groupby('week').agg({'bias1_mean': 'mean', 'bias1_std': 'mean', 'bias2_mean': 'mean', 'bias2_std': 'mean', 'bias3_mean': 'mean', 'bias3_std': 'mean', 'bias0_ap_mean' : 'mean', 'bias0_ap_std' : 'mean', 'bias0_mean_mean' : 'mean', 'bias0_mean_std' : 'mean'}).reset_index()
     df['plot_index'] = range(len(df)) # x values be all the weeks 
     
     plt.figure(figsize=(16, 8))
     
-    plt.plot(df['plot_index'], df['bias1_std'], 'o-', linewidth=4, markersize=3) # set up the lines
+    plt.plot(df['plot_index'], df['bias0_ap_std'], 'o-', label='AP', linewidth=4, markersize=3) # set up the lines
+    plt.plot(df['plot_index'], df['bias0_mean_std'], 's-', label='Mean', linewidth=4, markersize=3)
+    #plt.plot(df['plot_index'], df['bias1_std'], 'o-', linewidth=4, markersize=3) # set up the lines
     # plt.plot(df['plot_index'], df['bias2_std'], 's-', label='Mean', linewidth=2, markersize=3)
     # plt.plot(df['plot_index'], df['bias3_std'], '^-', label='Median', linewidth=2, markersize=3)
    
@@ -48,7 +47,7 @@ def graph_weekly_bias_std(input_csv: str):
     plt.xticks(fontsize=23) 
     plt.yticks(fontsize=14) 
     plt.xlabel('Week', fontsize=23)
-    plt.ylabel('Standard Deviation of Bias', fontsize=14)
+    plt.ylabel('Standard Deviation of Bias (Without Correction)', fontsize=14)
     plt.legend(fontsize=10)
     plt.grid(True, alpha=0.3)
     plt.tight_layout()
@@ -303,5 +302,5 @@ def graph_weekly_mean_bias_boxplot(input_csv: str):
     plt.close()
 
 if __name__ == "__main__":
-    #graph_weekly_bias_std("/Users/albertbogdan/IML-FALL2025---Voter-Bias/output_data/cfb/summary_stats/cfb_ss_week.csv")
-    create_svc_graph("/Users/albertbogdan/IML-FALL2025---Voter-Bias/output_data/cfb/average_biases/voter_conference_biases.csv")
+    graph_weekly_bias_mean("/Users/albertbogdan/IML-FALL2025---Voter-Bias/output_data/cfb/summary_stats/cfb_ss_week.csv")
+    #create_svc_graph("/Users/albertbogdan/IML-FALL2025---Voter-Bias/output_data/cfb/average_biases/voter_conference_biases.csv")

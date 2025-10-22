@@ -225,7 +225,7 @@ def create_vt_biases(csv_path: str):
 # output - season,week,bias1_mean,bias1_std,bias2_mean,bias2_std,bias3_mean,bias3_std
 # calculates mean/std of bias for a given week of each season
 def biases_summary_by_week(csv_path: str):
-    df_biases = pd.DataFrame(columns=["season", "week", "bias1_mean", "bias1_std", "bias2_mean", "bias2_std", "bias3_mean", "bias3_std"])
+    df_biases = pd.DataFrame(columns=["season", "week", "bias1_mean", "bias1_std", "bias2_mean", "bias2_std", "bias3_mean", "bias3_std", 'bias0_ap_mean', 'bias0_ap_std', 'bias0_mean_mean', 'bias0_mean_std'])
     df_input = pd.read_csv(csv_path)
     for (season, week), group in df_input.groupby(['Season', 'Week'], sort=False):
         mean_1 = group["bias1(v, t)"].mean()
@@ -234,6 +234,10 @@ def biases_summary_by_week(csv_path: str):
         std_2 = group["bias2(v, t)"].std()
         mean_3 = group["bias3(v, t)"].mean()
         std_3 = group["bias3(v, t)"].std()
+        mean_0_ap = group["bias0(v, t)_ap"].mean()
+        std_0_ap = group["bias0(v, t)_ap"].std()
+        mean_0_mean = group["bias0(v, t)_mean"].mean()
+        std_0_mean = group["bias0(v, t)_mean"].std()
 
         new_row = {
             'season': int(season),
@@ -244,9 +248,13 @@ def biases_summary_by_week(csv_path: str):
             'bias2_std': std_2,
             'bias3_mean': mean_3,
             'bias3_std': std_3,
+            'bias0_ap_mean': mean_0_ap,
+            'bias0_ap_std': std_0_ap,
+            'bias0_mean_mean': mean_0_mean,
+            'bias0_mean_std': std_0_mean,
         }
         df_biases.loc[len(df_biases)] = new_row   
-    numeric_columns = ['bias1_mean', 'bias1_std', 'bias2_mean', 'bias2_std', 'bias3_mean', 'bias3_std'] # round
+    numeric_columns = ['bias1_mean', 'bias1_std', 'bias2_mean', 'bias2_std', 'bias3_mean', 'bias3_std', 'bias0_ap_mean', 'bias0_ap_std', 'bias0_mean_mean', 'bias0_mean_std'] # round
     df_biases[numeric_columns] = df_biases[numeric_columns].round(4)
     df_biases.to_csv("summary_stats_by_week.csv", index=False)
     df_biases = df_biases.sort_values(['season', 'week']).reset_index(drop=True)
@@ -254,8 +262,9 @@ def biases_summary_by_week(csv_path: str):
 
 # output - season,team,bias1_mean,bias1_std,bias2_mean,bias2_std,bias3_mean,bias3_std
 # calculates mean/std of bias for a given team of each season
+
 def biases_summary_by_team(csv_path: str):
-    df_biases = pd.DataFrame(columns=["season", "team", "bias1_mean", "bias1_std", "bias2_mean", "bias2_std", "bias3_mean", "bias3_std"])
+    df_biases = pd.DataFrame(columns=["season", "team", "bias1_mean", "bias1_std", "bias2_mean", "bias2_std", "bias3_mean", "bias3_std", 'bias0_ap_mean', 'bias0_ap_std', 'bias0_mean_mean', 'bias0_mean_std'])
     df_input = pd.read_csv(csv_path)
     df_input = df_input.sort_values(['Season', 'Team (t)'])
     for (season, team), group in df_input.groupby(['Season', 'Team (t)'], sort=False):
@@ -265,6 +274,10 @@ def biases_summary_by_team(csv_path: str):
         std_2 = group["bias2(v, t)"].std()
         mean_3 = group["bias3(v, t)"].mean()
         std_3 = group["bias3(v, t)"].std()
+        mean_0_ap = group["bias0(v, t)_ap"].mean()
+        std_0_ap = group["bias0(v, t)_ap"].std()
+        mean_0_mean = group["bias0(v, t)_mean"].mean()
+        std_0_mean = group["bias0(v, t)_mean"].std()
 
         new_row = {
             'season': int(season),
@@ -275,18 +288,22 @@ def biases_summary_by_team(csv_path: str):
             'bias2_std': std_2,
             'bias3_mean': mean_3,
             'bias3_std': std_3,
+            'bias0_ap_mean': mean_0_ap,
+            'bias0_ap_std': std_0_ap,
+            'bias0_mean_mean': mean_0_mean,
+            'bias0_mean_std': std_0_mean,
         }
         df_biases.loc[len(df_biases)] = new_row
-    numeric_columns = ['bias1_mean', 'bias1_std', 'bias2_mean', 'bias2_std', 'bias3_mean', 'bias3_std'] # round
+    numeric_columns = ['bias1_mean', 'bias1_std', 'bias2_mean', 'bias2_std', 'bias3_mean', 'bias3_std', 'bias0_ap_mean', 'bias0_ap_std', 'bias0_mean_mean', 'bias0_mean_std'] # round
     df_biases[numeric_columns] = df_biases[numeric_columns].round(4)   
-    df_biases.to_csv("average_biases.csv", index=False)
+    df_biases.to_csv("ss_team.csv", index=False)
     df_biases = df_biases.sort_values(['season', 'team']).reset_index(drop=True)
     return df_biases
 
 # output - season,voter,bias1_mean,bias1_std,bias2_mean,bias2_std,bias3_mean,bias3_std
 # calculates mean/std of bias for a given voter of each season
 def biases_summary_by_voter(csv_path: str):
-    df_biases = pd.DataFrame(columns=["season", "voter", "bias1_mean", "bias1_std", "bias2_mean", "bias2_std", "bias3_mean", "bias3_std"])
+    df_biases = pd.DataFrame(columns=["season", "voter", "bias1_mean", "bias1_std", "bias2_mean", "bias2_std", "bias3_mean", "bias3_std", 'bias0_ap_mean', 'bias0_ap_std', 'bias0_mean_mean', 'bias0_mean_std'])
     df_input = pd.read_csv(csv_path)
     df_input = df_input.sort_values(['Season', 'Pollster (v)'])
     for (season, voter), group in df_input.groupby(['Season', 'Pollster (v)'], sort=False):
@@ -296,6 +313,10 @@ def biases_summary_by_voter(csv_path: str):
         std_2 = group["bias2(v, t)"].std()
         mean_3 = group["bias3(v, t)"].mean()
         std_3 = group["bias3(v, t)"].std()
+        mean_0_ap = group["bias0(v, t)_ap"].mean()
+        std_0_ap = group["bias0(v, t)_ap"].std()
+        mean_0_mean = group["bias0(v, t)_mean"].mean()
+        std_0_mean = group["bias0(v, t)_mean"].std()
 
         new_row = {
             'season': int(season),
@@ -306,11 +327,15 @@ def biases_summary_by_voter(csv_path: str):
             'bias2_std': std_2,
             'bias3_mean': mean_3,
             'bias3_std': std_3,
+            'bias0_ap_mean': mean_0_ap,
+            'bias0_ap_std': std_0_ap,
+            'bias0_mean_mean': mean_0_mean,
+            'bias0_mean_std': std_0_mean,
         }
         df_biases.loc[len(df_biases)] = new_row   
-    numeric_columns = ['bias1_mean', 'bias1_std', 'bias2_mean', 'bias2_std', 'bias3_mean', 'bias3_std'] # round
+    numeric_columns = ['bias1_mean', 'bias1_std', 'bias2_mean', 'bias2_std', 'bias3_mean', 'bias3_std', 'bias0_ap_mean', 'bias0_ap_std', 'bias0_mean_mean', 'bias0_mean_std'] # round
     df_biases[numeric_columns] = df_biases[numeric_columns].round(4)
-    df_biases.to_csv("ss_stats_voter.csv", index=False)
+    df_biases.to_csv("ss_voter.csv", index=False)
     df_biases = df_biases.sort_values(['season', 'voter']).reset_index(drop=True)
     return df_biases
 
@@ -361,6 +386,7 @@ def create_voter_conference_biases(average_biases_csv, cfb_csv: str):
 if __name__ == "__main__":
     #df_rankings = create_cam_rankings("original_data/college_basketball_polls_original.csv")
     #df_voters = create_teams("/Users/albertbogdan/IML-FALL2025---Voter-Bias/original_data/college_basketball_polls_original.csv")
-    create_voter_conference_biases("/Users/albertbogdan/IML-FALL2025---Voter-Bias/output_data/cfb/average_biases/average_biases.csv", "/Users/albertbogdan/IML-FALL2025---Voter-Bias/output_data/cfb/cfb_conf_aff.csv")
+    #create_voter_conference_biases("/Users/albertbogdan/IML-FALL2025---Voter-Bias/output_data/cfb/average_biases/average_biases.csv", "/Users/albertbogdan/IML-FALL2025---Voter-Bias/output_data/cfb/cfb_conf_aff.csv")
     #create_vt_biases("/Users/albertbogdan/IML-FALL2025---Voter-Bias/output_data/cfb/cfb_master_bias_file.csv")
     #create_season_team_biases("/Users/albertbogdan/IML-FALL2025---Voter-Bias/output_data/cfb/average_biases/average_biases.csv")
+    biases_summary_by_voter("/Users/albertbogdan/IML-FALL2025---Voter-Bias/output_data/cfb/cfb_master_bias_file.csv")
