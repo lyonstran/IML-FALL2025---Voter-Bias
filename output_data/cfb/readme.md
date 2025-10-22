@@ -7,9 +7,10 @@
 - `cfb_voters_summary`
 - `cfb_master_bias_file`
 - `cfb_conf_aff`
-- `cfb_average_biases`
+- `cfb_relative_biases.csv`
+- `cfb_cam_output.csv`
 
-### `cfb_teams`
+### `cfb_teams.csv`
 <b>Columns:</b>
 
 - year: year of corresponding season
@@ -18,7 +19,7 @@
 
 This dataset records the list of teams that have appeared in the top 25 College Football AP polls over time, keyed by year and week. 
 
-### `cfb_teams_summary`
+### `cfb_teams_summary.csv`
 <b>Columns:</b>
 
 - Team: list of school/teams that appeared in the AP poll (team names are standardized to be lowercased and hyphenated)
@@ -27,7 +28,7 @@ This dataset records the list of teams that have appeared in the top 25 College 
 
 This dataset records the list of teams that have appeared in the top 25 College Football AP polls over time, recording number of appearances and average rank in the polls. 
 
-### `cfb_voters`
+### `cfb_voters.csv`
 <b>Columns:</b>
 
 - year: year of corresponding season
@@ -36,7 +37,7 @@ This dataset records the list of teams that have appeared in the top 25 College 
 
 This dataset records the list of pollsters that participated in the top 25 College Football AP polls over time, keyed by year and week. 
 
-### `cfb_voters_summary`
+### `cfb_voters_summary.csv`
 <b>Columns:</b>
 
 - Voter: list of pollsters that participated in the AP poll for said week
@@ -44,7 +45,7 @@ This dataset records the list of pollsters that participated in the top 25 Colle
 
 This dataset records the list of pollsters that participated in the top 25 College Football AP polls over time, and how many times they've appeared. 
 
-### `cfb_master_bias_file`
+### `cfb_master_bias_file.csv`
 <b>Columns:</b>
 
 - Pollster (v): voter name correspoding to row recording their vote 
@@ -82,7 +83,7 @@ $$
 $$
 
 
-### `cfb_conf_aff`
+### `cfb_conf_aff.csv`
 <b>Columns:</b>
 
 - Season: season year
@@ -91,3 +92,26 @@ $$
 - Conference: Given team's conference in that week/season
 - Total_points: Total points earned that week
 
+This dataset records the teams that appear across the original poll data mapped to their respective conferences in a given season. 
+
+### `cfb_relative_biases.csv`
+<b>Columns:</b>
+
+- Percentile: ...
+- bias1(p): ...
+- bias2(p): ...
+- bias3(p): ...
+- bias0ap(p): ...
+- bias0mean(p): ...
+
+...
+
+### `cfb_cam_output.csv`
+<b>Columns:</b>
+
+- team: list of school/teams that appeared in the AP poll (team names are standardized to be lowercased and hyphenated)
+- year: year of corresponding season
+- week: AP poll week number in the season
+- ap_rank: calculated AP rank for said team. Unranked teams are ranked by default value of 26
+- average: average AP ranking
+- median: median AP ranking

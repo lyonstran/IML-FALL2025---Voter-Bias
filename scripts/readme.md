@@ -30,17 +30,39 @@ Functions for generating aggregated bias CSV files:
 
 # create_conf_aff_cbb.py
 
+Functions for generating College Basketball conference affiliation files
+
 - **`process_poll_data_cbb(df, year):`**
-   Inputs are original poll data and year. Reads HTML from corresponding college basketball season/year from sportsreference.com to map teams to respective conferences. Returns dataframe of teams with corresponding conferences for that specific season
+   Inputs are original poll data and year. Reads HTML from corresponding college basketball season/year from sportsreference.com to map teams to respective conferences. Returns dataframe of teams with corresponding conferences for that specific season.
 
 - **`normalize_school(school):`**
-   Normalizes names of schools to fit our school naming convention in the files
+   Normalizes names of schools to fit our school naming convention in the files.
 
 - **`def process_all_years_cbb(df):`**
-   Script using `process_poll_data_cbb` to loop through all the years in poll data and return dataframe with all the years/seasons of teams with their respective conferences
+   Script using `process_poll_data_cbb` to loop through all the years in poll data and return dataframe with all the years/seasons of teams with their respective conferences.
 
 # create_conf_aff_cfb.py
 
+Functions for generating College Basketball conference affiliation files
+
 - **`standardize_conference_name(conf: str):`**
-   ...
-   
+   Standardize imported conference names to match naming convention in files.
+
+- **`process_poll_data_cfb(df, year):`**
+   Inputs are original poll data and year. Reads HTML from corresponding college football season/year from sportsreference.com to map teams to respective conferences. Returns dataframe of teams with corresponding conferences for that specific season.
+
+- **`process_all_years_cfb(df):`**
+   Script using `process_poll_data_cfb` to loop through all the years in poll data and return dataframe with all the years/seasons of teams with their respective conferences.
+
+# create_master_bias_file.csv.py
+
+Script using `college_football_polls_original.csv` and `cfb_cam_output.csv` to make `cfb_master_bias_file.csv`, and `college_basketball_polls_original.csv` and `cbb_cam_output.csv` to make `cbb_master_bias_file.csv`.
+
+# create_relative_biases.py
+
+Script using `cfb_master_bias_file.csv` to convert bias measures to make `cfb_relative_biases.csv`. (WIP): Scipt using `cbb_master_bias_file.csv` to convert bias measures to make `cbb_relative_biases.csv`.
+
+# create_teams_voters_summary.py
+
+Script using `cfb_master_bias_file.csv` to make `cfb_teams_summary.csv` and `cfb_voter_summary.csv`. (WIP): Script using `cbb_master_bias_file.csv` to make `cbb_teams_summary.csv` and `cbb_voter_summary.csv`. 
+

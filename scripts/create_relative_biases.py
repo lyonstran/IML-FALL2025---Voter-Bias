@@ -1,6 +1,8 @@
 import pandas as pd
 import numpy as np
 
+
+#cfb
 df = pd.read_csv(
     r'C:\Users\lyons\OneDrive\Desktop\IML-FALL2025---Voter-Bias\output_data\cfb\cfb_master_bias_file.csv'
 )
