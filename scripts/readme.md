@@ -28,4 +28,19 @@ Functions for generating aggregated bias CSV files:
 - **`create_seasonteam_pair(input_csv: str):`**  
    Biases for top/bottom 10 ap rank biases for all season-team pairs.
 
+# create_conf_aff_cbb.py
+
+- **`process_poll_data_cbb(df, year):`**
+   Inputs are original poll data and year. Reads HTML from corresponding college basketball season/year from sportsreference.com to map teams to respective conferences. Returns dataframe of teams with corresponding conferences for that specific season
+
+- **`normalize_school(school):`**
+   Normalizes names of schools to fit our school naming convention in the files
+
+- **`def process_all_years_cbb(df):`**
+   Script using `process_poll_data_cbb` to loop through all the years in poll data and return dataframe with all the years/seasons of teams with their respective conferences
+
+# create_conf_aff_cfb.py
+
+- **`standardize_conference_name(conf: str):`**
+   ...
    

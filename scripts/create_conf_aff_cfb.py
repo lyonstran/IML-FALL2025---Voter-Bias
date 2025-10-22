@@ -1,7 +1,7 @@
 import pandas as pd
 import time
 
-def standardize_conference_name(conf: str) -> str:
+def standardize_conference_name(conf: str):
     if pd.isna(conf):
         return None
     conf = (
