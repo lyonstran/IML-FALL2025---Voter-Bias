@@ -91,7 +91,7 @@ $$
 - bias0(v, t)_mean:
 
 $$
-\text{bias}_1(v, t)_{mean} = r(v, t) - \quad r_2(t) = \text{unweighted mean rank}
+\text{bias}_0(v, t)_{mean} = r(v, t) - \quad r_2(t) = \text{unweighted mean rank}
 $$
 
 
