@@ -85,13 +85,13 @@ $$
 - bias0(v, t)_ap:
 
 $$
-\text{bias}_0(v, t)_ap = \frac{r(v, t) , \quad r_3(t) = \text{unweighted AP rank}
+\text{bias}_0(v, t)_ap = r(v, t) - \quad r_1(t) = \text{unweighted AP rank}
 $$
 
 - bias0(v, t)_mean:
 
 $$
-\text{bias}_1(v, t)_mean = \frac{r(v, t) , \quad r_3(t) = \text{unweighted mean rank}
+\text{bias}_1(v, t)_mean = r(v, t) - \quad r_2(t) = \text{unweighted mean rank}
 $$
 
 
