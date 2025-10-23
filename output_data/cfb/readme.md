@@ -85,15 +85,16 @@ $$
 - bias0(v, t)_ap:
 
 $$
-\text{bias}_0(v, t)_{ap} = r(v, t) - \quad r_1(t) = \text{unweighted AP rank}
+\text{bias}_0(v, t)_{ap} = r(v, t) - r_1(t) = \text{unweighted AP rank}
 $$
 
 - bias0(v, t)_mean:
 
 $$
-\text{bias}_0(v, t)_{mean} = r(v, t) - \quad r_2(t) = \text{unweighted mean rank}
+\text{bias}_0(v, t)_{mean} = r(v, t) - r_2(t) = \text{unweighted mean rank}
 $$
 
+This dataset serves as a lookup file for the calcualted biases for a given voter 
 
 ### `cfb_conf_aff.csv`
 <b>Columns:</b>
@@ -109,14 +110,14 @@ This dataset records the teams that appear across the original poll data mapped 
 ### `cfb_relative_biases.csv`
 <b>Columns:</b>
 
-- Percentile: ...
-- bias1(p): ...
-- bias2(p): ...
-- bias3(p): ...
-- bias0ap(p): ...
-- bias0mean(p): ...
+- Percentile: records the percentage of biases in the given row of the dataset that are at or below a particular value
+- bias1(p): weighted AP bias measure corresponding to the percentile
+- bias2(p): weighted mean bias measure corresponding to the percentile
+- bias3(p): weighted median bias measure corresponding to the percentile
+- bias0ap(p): unweighted AP bias measure corresponding to the percentile
+- bias0mean(p): unweighted mean bias measure corresponding to the percentile
 
-...
+This dataset records the relative biases to a percentile
 
 ### `cfb_cam_output.csv`
 <b>Columns:</b>
