@@ -54,15 +54,18 @@ Functions for generating College Basketball conference affiliation files
 - **`process_all_years_cfb(df):`**
    Script using `process_poll_data_cfb` to loop through all the years in poll data and return dataframe with all the years/seasons of teams with their respective conferences.
 
-# create_master_bias_file.csv.py
+# create_master_bias.csv.py
 
-Script using `college_football_polls_original.csv` and `cfb_cam_output.csv` to make `cfb_master_bias_file.csv`, and `college_basketball_polls_original.csv` and `cbb_cam_output.csv` to make `cbb_master_bias_file.csv`.
+Script using `college_football_polls_original.csv` and `cfb_cam_output.csv` to make `cfb_master_bias.csv`, (WIP) Using `college_basketball_polls_original.csv` and `cbb_cam_output.csv` to make `cbb_master_bias.csv`.
 
-# create_relative_biases.py
+# create_percentile_biases.py
 
-Script using `cfb_master_bias_file.csv` to convert bias measures to make `cfb_relative_biases.csv`. (WIP): Scipt using `cbb_master_bias_file.csv` to convert bias measures to make `cbb_relative_biases.csv`.
+Script using `cfb_master_bias.csv` to convert bias measures to make `cfb_percentile_biases.csv`. (WIP): Scipt using `cbb_master_bias.csv` to convert bias measures to make `cbb_percentile_biases.csv`.
 
 # create_teams_voters_summary.py
 
-Script using `cfb_master_bias_file.csv` to make `cfb_teams_summary.csv` and `cfb_voter_summary.csv`. (WIP): Script using `cbb_master_bias_file.csv` to make `cbb_teams_summary.csv` and `cbb_voter_summary.csv`. 
+Script using `cfb_master_bias.csv` to make `cfb_teams_summary.csv` and `cfb_voter_summary.csv`. (WIP): Script using `cbb_master_bias.csv` to make `cbb_teams_summary.csv` and `cbb_voter_summary.csv`. 
 
+# create_master_relative_percentage_bias.py
+
+Script using `college_football_polls_original.csv` and `cfb_cam_output.csv` to make `cfb_master_relative_percentage_bias.csv`. (WIP) Using `college_basketball_polls_original.csv` and `cbb_cam_output.csv` to make `cbb_master_relative_percentage_bias.csv`.
