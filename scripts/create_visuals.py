@@ -11,11 +11,16 @@ def graph_weekly_bias_mean(input_csv: str):
     df = df.reset_index(drop=True)
     df = df.groupby('week').agg({'bias1_mean': 'mean', 'bias1_std': 'mean', 'bias2_mean': 'mean', 'bias2_std': 'mean', 'bias3_mean': 'mean', 'bias3_std': 'mean', 'bias0_ap_mean' : 'mean', 'bias0_ap_std' : 'mean', 'bias0_mean_mean' : 'mean', 'bias0_mean_std' : 'mean'}).reset_index()
     df['plot_index'] = range(len(df)) # x values be all the weeks 
+    scale_factor = 0.1
+    df['bias0_ap_mean'] *= 0.1
+    df['bias0_mean_mean'] *= 0.1
     
     plt.figure(figsize=(16, 8))
     
     plt.plot(df['plot_index'], df['bias0_ap_mean'], 'o-', label='AP', linewidth=4, markersize=3) # set up the lines
     plt.plot(df['plot_index'], df['bias0_mean_mean'], 's-', label='Mean', linewidth=4, markersize=3)
+    plt.plot(df['plot_index'], df['bias1_mean'], '^-', label='Spearman AP', linewidth=4, markersize=3)
+    plt.plot(df['plot_index'], df['bias2_mean'], 'o-', label='Spearman Mean', linewidth=4, markersize=3)
    
     plt.xticks(fontsize=23) 
     plt.yticks(fontsize=14) 
@@ -32,11 +37,17 @@ def graph_weekly_bias_std(input_csv: str):
     df = df.reset_index(drop=True)
     df = df.groupby('week').agg({'bias1_mean': 'mean', 'bias1_std': 'mean', 'bias2_mean': 'mean', 'bias2_std': 'mean', 'bias3_mean': 'mean', 'bias3_std': 'mean', 'bias0_ap_mean' : 'mean', 'bias0_ap_std' : 'mean', 'bias0_mean_mean' : 'mean', 'bias0_mean_std' : 'mean'}).reset_index()
     df['plot_index'] = range(len(df)) # x values be all the weeks 
+    scale_factor = 0.1
+    df['bias0_ap_std'] *= 0.1
+    df['bias0_mean_std'] *= 0.1
     
     plt.figure(figsize=(16, 8))
     
     plt.plot(df['plot_index'], df['bias0_ap_std'], 'o-', label='AP', linewidth=4, markersize=3) # set up the lines
     plt.plot(df['plot_index'], df['bias0_mean_std'], 's-', label='Mean', linewidth=4, markersize=3)
+    plt.plot(df['plot_index'], df['bias1_std'], '^-', label='Spearman AP', linewidth=4, markersize=3)
+    plt.plot(df['plot_index'], df['bias2_std'], 'o-', label='Spearman Mean', linewidth=4, markersize=3)
+   
     #plt.plot(df['plot_index'], df['bias1_std'], 'o-', linewidth=4, markersize=3) # set up the lines
     # plt.plot(df['plot_index'], df['bias2_std'], 's-', label='Mean', linewidth=2, markersize=3)
     # plt.plot(df['plot_index'], df['bias3_std'], '^-', label='Median', linewidth=2, markersize=3)
@@ -301,6 +312,173 @@ def graph_weekly_mean_bias_boxplot(input_csv: str):
     plt.savefig('mean_weekly_boxplot.png')
     plt.close()
 
+def create_svc_graph_uncorrected(input_csv: str):
+    df = pd.read_csv(input_csv)
+    df = df.reset_index(drop=True)
+    
+    df_grouped = df.groupby('Conference').agg({'bias0-ap': 'mean'}).reset_index()
+    # df_grouped["Conference" == 'SEC'] = df_grouped[df_grouped["Conference"] == 'sec']
+    # df_grouped['BIG 10'] = df_grouped[df_grouped["Conference"] == 'big-ten']
+    # df_grouped['MAC'] = df_grouped[df_grouped["Conference"] == 'mac']
+    # df_grouped['ACC'] = df_grouped['acc']
+    # df_grouped['BIG 12'] = df_grouped['big-12']
+    # df_grouped['PAC 12'] = df_grouped['pac-12']
+    # df_grouped['CUSA'] = df_grouped['cusa']
+    # df_grouped['AMERICAN'] = df_grouped['american']
+    # df_grouped['MWC'] = df_grouped['mwc']
+    # df_grouped['SUN BELT'] = df_grouped['sun-belt']
+
+    df_grouped = df_grouped.sort_values('bias0-ap')  # sort by bias value
+    df_grouped['bias0-ap'] *= 0.1
+    # df_grouped = df_grouped[df_grouped['Conference'] != "mvfc" & df_grouped['Conference'] != "sec" & df_grouped['Conference'] != "big-ten" & df_grouped['Conference'] != "mac" & df_grouped['Conference'] != "acc" & df_grouped['Conference'] != "big-12" & df_grouped['Conference'] != "pac-12" & df_grouped['Conference'] != "cusa" & df_grouped['Conference'] != "american" & df_grouped['Conference'] != "mwc" & df_grouped['Conference'] != "sun-belt"] 
+    df_grouped = df_grouped[df_grouped['Conference'] != "mvfc"]
+    print(df_grouped)
+    y_ticks = ['SEC', 'BIG 10', 'MAC', 'ACC', 'BIG 12', 'PAC 12', 'CUSA', 'AMERICAN', 'MWC', 'SUN BELT']
+    values = [9, 8, 7, 6, 5, 4, 3 ,2, 1, 0]
+    
+    plt.figure(figsize=(14, 8))
+    
+    bars = plt.barh(df_grouped['Conference'], df_grouped['bias0-ap'], 
+                   color='steelblue', edgecolor='black', linewidth=1.2)
+    
+    for i, bar in enumerate(bars):
+        if df_grouped.iloc[i]['bias0-ap'] < 0:
+            bar.set_color('indianred')
+        else:
+            bar.set_color('mediumseagreen')
+    
+    plt.axvline(x=0, color='black', linestyle='-', linewidth=0.8)
+
+    plt.xticks(fontsize=21) 
+    plt.yticks(values, y_ticks, fontsize=21) 
+    plt.ylabel('Conference', fontsize=21)
+    plt.xlabel('Bias (uncorrected)', fontsize=21)
+    plt.grid(True, alpha=0.3, axis='x')
+    plt.tight_layout()
+    plt.savefig('conference_bias.png')
+
+def create_voterteam_pair(input_csv: str, master_csv: str, min_votes: int = 500):
+    analysis_df = pd.read_csv(master_csv)
+    voter_vote_counts = analysis_df.groupby('Pollster (v)').size().reset_index()
+    voter_vote_counts.columns = ['voter', 'total_votes']
+    # add the total votes as a column 
+    
+    df = pd.read_csv(input_csv)
+    df = df.merge(voter_vote_counts, on='voter')
+    
+    df = df[df['total_votes'] >= min_votes]
+    
+    df = df.sort_values('bias1-a')
+    bottom_5 = df.head(5)
+    top_5 = df.tail(5)
+    df_plot = pd.concat([bottom_5, top_5])
+    df_plot['label'] = df_plot['voter'] + ' - ' + df_plot['team']
+    
+    plt.figure(figsize=(14, 10))
+    bars = plt.barh(df_plot['label'], df_plot['bias1-a'], edgecolor='black', linewidth=1)
+    colors = ['indianred' if x < 0 else 'mediumseagreen' for x in df_plot['bias1-a']]
+    for bar, color in zip(bars, colors):
+        bar.set_color(color)
+    
+    plt.xticks(fontsize=21) 
+    plt.yticks(fontsize=14) 
+    plt.axvline(x=0, color='black', linestyle='-', linewidth=1.5)
+    plt.xlabel('Bias', fontsize=21)
+    plt.ylabel('Voter/Team', fontsize=12)
+    plt.grid(True, alpha=0.3, axis='x')
+    plt.tight_layout()
+    plt.savefig('voterteam_bias.png')
+
+def create_seasonteam_pair(input_csv: str):
+    df = pd.read_csv(input_csv)
+    df = df.sort_values('bias1-a')
+    
+    bottom_5 = df.head(5)
+    top_5 = df.tail(5)
+    df_plot = pd.concat([bottom_5, top_5])
+    
+    df_plot['label'] = df_plot['season'].astype(str) + ' - ' + df_plot['team']
+    
+    plt.figure(figsize=(14, 10))
+    
+    bars = plt.barh(df_plot['label'], df_plot['bias1-a'], edgecolor='black', linewidth=1)
+    
+    colors = ['indianred' if x < 0 else 'mediumseagreen' for x in df_plot['bias1-a']]
+    for bar, color in zip(bars, colors):
+        bar.set_color(color)
+    
+    plt.xticks(fontsize=21) 
+    plt.yticks(fontsize=14) 
+    plt.axvline(x=0, color='black', linestyle='-', linewidth=1.5)
+    plt.xlabel('Bias', fontsize=21)
+    plt.ylabel('Season/Team', fontsize=12)
+    plt.grid(True, alpha=0.3, axis='x')
+    plt.tight_layout()
+    plt.savefig('seasonteam_bias.png')
+
+def create_voterteam_pair_nc(input_csv: str, master_csv: str, min_votes: int = 500):
+    analysis_df = pd.read_csv(master_csv)
+    voter_vote_counts = analysis_df.groupby('Pollster (v)').size().reset_index()
+    voter_vote_counts.columns = ['voter', 'total_votes']
+    # add the total votes as a column 
+    
+    df = pd.read_csv(input_csv)
+    df = df.merge(voter_vote_counts, on='voter')
+    
+    df = df[df['total_votes'] >= min_votes]
+    
+    df = df.sort_values('bias0-ap')
+    df["bias0-ap"] *= 0.1
+    bottom_5 = df.head(5)
+    top_5 = df.tail(5)
+    df_plot = pd.concat([bottom_5, top_5])
+    df_plot['label'] = df_plot['voter'] + ' - ' + df_plot['team']
+    
+    plt.figure(figsize=(14, 10))
+    bars = plt.barh(df_plot['label'], df_plot['bias0-ap'], edgecolor='black', linewidth=1)
+    colors = ['indianred' if x < 0 else 'mediumseagreen' for x in df_plot['bias0-ap']]
+    for bar, color in zip(bars, colors):
+        bar.set_color(color)
+    
+    plt.xticks(fontsize=21) 
+    plt.yticks(fontsize=14) 
+    plt.axvline(x=0, color='black', linestyle='-', linewidth=1.5)
+    plt.xlabel('AP Bias (no correction), scaled by 0.1', fontsize=21)
+    plt.ylabel('Voter/Team', fontsize=12)
+    plt.grid(True, alpha=0.3, axis='x')
+    plt.tight_layout()
+    plt.savefig('voterteam_bias.png')
+
+def create_seasonteam_pair_nc(input_csv: str):
+    df = pd.read_csv(input_csv)
+    df = df.sort_values('bias0-ap')
+    df["bias0-ap"] *= 0.1
+    
+    bottom_5 = df.head(5)
+    top_5 = df.tail(5)
+    df_plot = pd.concat([bottom_5, top_5])
+    
+    df_plot['label'] = df_plot['season'].astype(str) + ' - ' + df_plot['team']
+    
+    plt.figure(figsize=(14, 10))
+    
+    bars = plt.barh(df_plot['label'], df_plot['bias0-ap'], edgecolor='black', linewidth=1)
+    
+    colors = ['indianred' if x < 0 else 'mediumseagreen' for x in df_plot['bias0-ap']]
+    for bar, color in zip(bars, colors):
+        bar.set_color(color)
+    
+    plt.xticks(fontsize=21) 
+    plt.yticks(fontsize=14) 
+    plt.axvline(x=0, color='black', linestyle='-', linewidth=1.5)
+    plt.xlabel('Bias', fontsize=21)
+    plt.ylabel('Season/Team', fontsize=12)
+    plt.grid(True, alpha=0.3, axis='x')
+    plt.tight_layout()
+    plt.savefig('seasonteam_bias.png')
+
 if __name__ == "__main__":
-    graph_weekly_bias_mean("/Users/albertbogdan/IML-FALL2025---Voter-Bias/output_data/cfb/summary_stats/cfb_ss_week.csv")
-    #create_svc_graph("/Users/albertbogdan/IML-FALL2025---Voter-Bias/output_data/cfb/average_biases/voter_conference_biases.csv")
+    #graph_weekly_bias("/Users/albertbogdan/IML-FALL2025---Voter-Bias/output_data/cfb/summary_stats/cfb_ss_week.csv")
+    #create_svc_graph_uncorrected("/Users/albertbogdan/IML-FALL2025---Voter-Bias/output_data/cfb/average_biases/voter_conference_biases.csv")
+    # create_voterteam_pair_nc("output_data/cfb/average_biases/average_biases.csv", "output_data/cfb/cfb_master_bias.csv")
+    create_seasonteam_pair_nc("output_data/cfb/average_biases/average_biases.csv")
