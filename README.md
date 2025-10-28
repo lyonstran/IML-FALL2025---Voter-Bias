@@ -1,1 +1,2 @@
-# THIS IS A TEMPORARY BRANCH THAT I'M USING, DON'T MERGE THIS BRANCH WITH THE MAIN AT ANY POINT - LYONS
+# THIS IS A TEMPORARY BRANCH THAT I'M USING. DON'T MERGE THIS BRANCH WITH THE MAIN AT ANY POINT - LYONS
+# (right now, this branch is just being used to organize the files around first before before actually committing to the main. this branch will be deleted once everything is sorted out)
