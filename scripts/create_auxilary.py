@@ -341,13 +341,17 @@ def biases_summary_by_voter(csv_path: str):
 
 def create_voter_team_biases(csv_path: str):
     df_input = pd.read_csv(csv_path)
+    counts = df_input.groupby(['voter', 'team'], sort=False).size().reset_index(name='n')
     df_input = df_input.groupby(['voter', 'team'], sort=False).agg({'bias1-a': 'mean', 'bias1-b': 'mean', 'bias1-c': 'mean', 'bias2-a': 'mean', 'bias2-b': 'mean', 'bias2-c': 'mean', 'bias3-a': 'mean', 'bias3-b': 'mean', 'bias3-c': 'mean', 'bias0-ap': 'mean', 'bias0-mean': 'mean'}).reset_index()
+    df_input = df_input.merge(counts, on=['voter', 'team'])
     df_input.to_csv("voter_team_biases.csv", index=False)
     return df_input
 
 def create_season_team_biases(csv_path: str):
     df_input = pd.read_csv(csv_path)
+    counts = df_input.groupby(['season', 'team'], sort=False).size().reset_index(name='n')
     df_input = df_input.groupby(['season', 'team'], sort=False).agg({'bias1-a': 'mean', 'bias1-b': 'mean', 'bias1-c': 'mean', 'bias2-a': 'mean', 'bias2-b': 'mean', 'bias2-c': 'mean', 'bias3-a': 'mean', 'bias3-b': 'mean', 'bias3-c': 'mean', 'bias0-ap': 'mean', 'bias0-mean': 'mean'}).reset_index()
+    df_input = df_input.merge(counts, on=['season', 'team'])
     df_input.to_csv("season_team_biases.csv", index=False)
     return df_input
 
@@ -388,5 +392,5 @@ if __name__ == "__main__":
     #df_voters = create_teams("/Users/albertbogdan/IML-FALL2025---Voter-Bias/original_data/college_basketball_polls_original.csv")
     #create_voter_conference_biases("/Users/albertbogdan/IML-FALL2025---Voter-Bias/output_data/cfb/average_biases/average_biases.csv", "/Users/albertbogdan/IML-FALL2025---Voter-Bias/output_data/cfb/cfb_conf_aff.csv")
     #create_vt_biases("output_data/cfb/relative/cfb_master_relative_percentage_bias.csv")
-    #create_voter_team_biases("output_data/cfb/relative/average_biases/average_biases.csv")
+    create_season_team_biases("output_data/cfb/original/average_biases.csv")
     #biases_summary_by_team("output_data/cfb/relative/cfb_master_relative_percentage_bias.csv")
