@@ -15,6 +15,8 @@ Folder containing initial visualizations made near the start of the project. The
 
 ### `visuals_msp`: 
 
+(WIP): folder is currently empty
+
 Folder containing visualizations made for the Midsemester Presentation during FA25 semester. 
 
 ### `visuals_no_correction`: 
