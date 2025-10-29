@@ -1,5 +1,22 @@
 # README for CFB Visualizations
 
-* week_visual_mean: this visualization is a line chart of each week based on the mean of the AP/Mean/Median bias across all teams. 
-* week_visual_std: this visualization is a line chart of each week based on the std of the AP/Mean/Median bias across all teams. 
-* avg_percentile: this visualization is a line chart of the AP/Mean/Median bias based on percentile across all teams. 
+## Files in folder:
+
+- `old_visuals`
+
+- `visuals_msp`
+
+- `visuals_no_correction`
+
+
+### `old_visuals`: 
+
+Folder containing initial visualizations made near the start of the project. These visualizations are not as relelvant to our goals anymore. 
+
+### `visuals_msp`: 
+
+Folder containing visualizations made for the Midsemester Presentation during FA25 semester. 
+
+### `visuals_no_correction`: 
+
+(WIP): folder is currently empty. 
