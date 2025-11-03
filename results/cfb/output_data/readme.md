@@ -7,7 +7,7 @@
 
 - `conference_bias.csv`
     - CSV that shows bias1, bias2, bias3, and bias0 by voter and conference
-    - columns: voter,Conference,bias1-a,bias1-b,bias1-c,bias2-a,bias2-b,bias2-c,bias3-a,bias3-b,bias3-c,bias0-ap,bias0-mean
+    - columns: voter,Conference,bias1-a,bias1-b,bias1-c,bias2-a,bias2-b,bias2-c,bias3-a,bias3-b,bias3-c,bias0-ap,bias0-mean,n
 
 - `conference_bias.png`
     - bar chart that shows the bias by conference, no correction
@@ -25,22 +25,22 @@
 
 - `season_team.csv`
     - biases by season and team
-    - columns: season,team,bias1_mean,bias1_std,bias2_mean,bias2_std,bias3_mean,bias3_std,bias0_ap_mean,bias0_ap_std,bias0_mean_mean,bias0_mean_std
+    - columns: season,team,bias1_mean,bias1_std,bias2_mean,bias2_std,bias3_mean,bias3_std,bias0_ap_mean,bias0_ap_std,bias0_mean_mean,bias0_mean_std,n
 
 - `season_team.png`
     - bar chart of top 5 / bottom 5 season team pairs
 
 - `season_voter_conference_biases.csv`
     - biases by season, voter, and conference
-    - columns: voter,season,Conference,bias1-a,bias1-b,bias1-c,bias2-a,bias2-b,bias2-c,bias3-a,bias3-b,bias3-c,bias0-ap,bias0-mean
+    - columns: voter,season,Conference,bias1-a,bias1-b,bias1-c,bias2-a,bias2-b,bias2-c,bias3-a,bias3-b,bias3-c,bias0-ap,bias0-mean,n
 
 - `season_voter_team.csv`
     - biases by season, voter, and team
-    - columns: season,voter,team,bias1-a,bias1-b,bias1-c,bias2-a,bias2-b,bias2-c,bias3-a,bias3-b,bias3-c,bias0-ap,bias0-mean
+    - columns: season,voter,team,bias1-a,bias1-b,bias1-c,bias2-a,bias2-b,bias2-c,bias3-a,bias3-b,bias3-c,bias0-ap,bias0-mean,n
 
 - `season_voter.csv`
     - biases by season and voter 
-    - columns: season,voter,bias1_mean,bias1_std,bias2_mean,bias2_std,bias3_mean,bias3_std,bias0_ap_mean,bias0_ap_std,bias0_mean_mean,bias0_mean_std
+    - columns: season,voter,bias1_mean,bias1_std,bias2_mean,bias2_std,bias3_mean,bias3_std,bias0_ap_mean,bias0_ap_std,bias0_mean_mean,bias0_mean_std,n
 
 - `season_week.csv`
     - biases by season and week
