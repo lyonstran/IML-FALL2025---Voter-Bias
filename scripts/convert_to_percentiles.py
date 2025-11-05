@@ -1,11 +1,12 @@
 import pandas as pd
 
 def convert_to_percentiles(input_file, columns):
+    print("INPUT", input_file)
     df = pd.read_csv(input_file)
 
     # Standardize column names
     df.columns = df.columns.str.lower().str.replace('_', '-').str.strip()
-    exclude_cols = {"season", "year"}
+    exclude_cols = {"season", "year", "Week",  "week"}
 
     # option to select all columns
     if len(columns) == 1 and columns[0].lower() == "all":
@@ -60,3 +61,6 @@ if __name__ == "__main__":
     input_file = sys.argv[1]
     columns = sys.argv[2:]
     convert_to_percentiles(input_file, columns)
+
+
+                                                  

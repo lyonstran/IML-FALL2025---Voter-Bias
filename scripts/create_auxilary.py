@@ -378,6 +378,7 @@ def create_season_voter_conference_biases(average_biases_csv, cfb_csv: str):
     return df_ab
 
 def create_voter_conference_biases(average_biases_csv, cfb_csv: str):
+    print("PRINT", average_biases_csv)
     df_ab = pd.read_csv(average_biases_csv)
     df_c = pd.read_csv(cfb_csv)
     df_ab = df_ab.merge(
@@ -398,7 +399,7 @@ def create_voter_conference_biases(average_biases_csv, cfb_csv: str):
 if __name__ == "__main__":
     #df_rankings = create_cam_rankings("original_data/college_basketball_polls_original.csv")
     #df_voters = create_teams("/Users/albertbogdan/IML-FALL2025---Voter-Bias/original_data/college_basketball_polls_original.csv")
-    create_voter_conference_biases("results/cfb/output_data/season_voter_team.csv", "results/cfb/original_data/conference_affiliation.csv")
+    create_voter_conference_biases("/Users/albertbogdan/IML-FALL2025---Voter-Bias/results/cfb/output_data/season_voter_relative.csv", "/Users/albertbogdan/IML-FALL2025---Voter-Bias/results/cfb/original_data/conference_affiliation.csv")
     #create_vt_biases("results/cfb/original_data/master_bias.csv")
     #create_season_team_biases("output_data/cfb/original/average_biases.csv")
     #biases_summary_by_team("output_data/cfb/relative/cfb_master_relative_percentage_bias.csv")
