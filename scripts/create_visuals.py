@@ -190,6 +190,7 @@ def create_svc_graph(input_csv: str):
     print(df_grouped)
     y_ticks = ['SEC', 'BIG 10', 'MAC', 'ACC', 'BIG 12', 'PAC 12', 'CUSA', 'AMERICAN', 'MWC', 'SUN BELT']
     values = [9, 8, 7, 6, 5, 4, 3 ,2, 1, 0]
+    df_grouped['bias1-a'] = df_grouped['bias1-a'] * 2 - 1
     
     plt.figure(figsize=(14, 8))
     
@@ -204,11 +205,12 @@ def create_svc_graph(input_csv: str):
     
     plt.axvline(x=0, color='black', linestyle='-', linewidth=0.8)
 
-    plt.xticks(fontsize=21) 
+    plt.xticks([-1, -0.8, -0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6, 0.8, 1], fontsize=21) 
     plt.yticks(values, y_ticks, fontsize=21) 
     plt.ylabel('Conference', fontsize=21)
     plt.xlabel('Bias', fontsize=21)
     plt.grid(True, alpha=0.3, axis='x')
+    plt.xlim(-0.5, 0.5)
     plt.tight_layout()
     plt.savefig('conference_bias.png')
 
@@ -480,7 +482,7 @@ def create_seasonteam_pair_nc(input_csv: str):
     plt.savefig('seasonteam_bias.png')
 
 if __name__ == "__main__":
-    graph_weekly_bias("/Users/albertbogdan/IML-FALL2025---Voter-Bias/results/cfb/output_data/season_week_relative.csv")
-    #create_svc_graph("results/cfb/output_data/conference_bias_relative.csv")
+    #graph_weekly_bias("/Users/albertbogdan/IML-FALL2025---Voter-Bias/results/cfb/output_data/season_week_relative.csv")
+    create_svc_graph("results/cfb/output_data/conference_bias_relative.csv")
     # create_voterteam_pair_nc("output_data/cfb/average_biases/average_biases.csv", "output_data/cfb/cfb_master_bias.csv")
     #create_voterteam_pair("/Users/albertbogdan/IML-FALL2025---Voter-Bias/results/cfb/output_data/voter_team_relative.csv", "/Users/albertbogdan/IML-FALL2025---Voter-Bias/results/cfb/original_data/master_bias_relative.csv")
