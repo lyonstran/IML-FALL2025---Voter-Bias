@@ -2,6 +2,7 @@
 ## This folder contains the following CSV files:
 
 - `master_bias.csv`
+- `master_bias_relative.csv`
 - `conference_affiliation.csv`
 - `ranked_teams.csv`
 - `team_apperances.csv`
@@ -62,7 +63,23 @@ $$
 \text{bias}_0(v, t)_{mean} = r(v, t) - r_2(t) = \text{unweighted mean rank}
 $$
 
-This dataset serves as a lookup file for the calculated biases, using both the relative and raw differences for a given voter. “Relative difference” shows how strongly a voter deviates from the reference ranking, scaled by how important that rank is.
+This dataset serves as a lookup file for the calculated biases, using both the weighted and raw differences for a given voter. “Weighted difference” shows how strongly a voter deviates from the reference ranking, scaled by how important that rank is.
+
+---
+
+### `master_bias_relative.csv`
+<b>Columns:</b>
+
+- Pollster (v): voter name corresponding to row recording their vote  
+- Season: season year  
+- Week: AP poll week number in the season  
+- Rank: the position assigned by the voter  
+- Team (t): the team being ranked (team names are standardized to be lowercased and hyphenated)  
+- ap_rank: calculated percentile AP rank for said team. 
+- average: percentile average rank of calculated AP rank for said team for that given week  
+- median: percentile median rank of calculated AP rank for said team for that given week  
+
+This dataset serves as a lookup file for the calculated percentile biases, using both the weighted and raw differences for a given voter.
 
 ---
 
@@ -75,27 +92,25 @@ This dataset serves as a lookup file for the calculated biases, using both the r
 - Conference: Given team's conference in that week/season  
 - Total_points: Total points earned that week  
 
-This dataset maps each team appearing in the AP poll to its respective conference for that week and season, allowing for conference-level aggregation and bias analysis.
+This dataset maps each team appearing in the AP poll to its respective conference for that week and season.
 
 ---
 
 ### `ranked_teams.csv`
 <b>Columns:</b>
 
-- Season: season year  
+- year: season year  
 - Week: AP poll week number in the season  
-- Team: The team being ranked (standardized format)  
-- Rank: AP rank for said team that week  
-- Points: Total points received in the AP poll  
+- Team: list of school/teams that appeared in the AP poll 
 
-This dataset provides the complete weekly rankings of teams across seasons, allowing tracking of AP poll changes and rank progression over time.
+This dataset provides the complete weekly rankings of teams across seasons
 
 ---
 
 ### `team_apperances.csv`
 <b>Columns:</b>
 
-- Team: list of school/teams that appeared in the AP poll (standardized to lowercase and hyphenated)  
+- Team: list of school/teams that appeared in the AP poll 
 - appearances_AP25: number of that team's appearances in the Top 25 AP polls  
 - avg_rank: average rank of the team in the Top 25 AP polls  
 
@@ -107,10 +122,11 @@ This dataset summarizes how often each team appears in the AP Top 25 over all se
 <b>Columns:</b>
 
 - Team: list of school/teams that appeared in the AP poll (standardized format)  
-- avg_rank: average AP ranking over all appearances  
+- year: season year
+- week: AP poll week number in the season
+- average: average AP ranking over all appearances  
 - median_rank: median AP ranking across appearances  
-- best_rank: best (lowest) AP rank achieved  
-- total_points: cumulative AP points across all appearances  
+- ap_rank: Official AP rank given for corresponding week
 
 This dataset compiles team-level aggregate ranking statistics, allowing for comparison of team consistency and peak performance across seasons.
 
@@ -129,10 +145,9 @@ This dataset provides summary-level statistics for each voter, showing their tot
 ### `voters_by_week.csv`
 <b>Columns:</b>
 
-- Season: season year  
+- Year: season year  
 - Week: AP poll week number in the season  
-- Voter: pollster name  
-- Publication: media outlet or affiliation of the voter  
+- Voter: pollster names  
 
-This dataset tracks which pollsters participated each week, along with their associated publication. It serves as the base file for joining to bias measures, appearance summaries, and temporal participation patterns.
+This dataset tracks which pollsters participated each week by year.
 
