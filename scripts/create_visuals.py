@@ -206,11 +206,11 @@ def create_svc_graph(input_csv: str):
     plt.axvline(x=0, color='black', linestyle='-', linewidth=0.8)
 
     plt.xticks([-1, -0.8, -0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6, 0.8, 1], fontsize=21) 
+    plt.xlim(-0.5, 0.5)
     plt.yticks(values, y_ticks, fontsize=21) 
     plt.ylabel('Conference', fontsize=21)
     plt.xlabel('Bias', fontsize=21)
     plt.grid(True, alpha=0.3, axis='x')
-    plt.xlim(-0.5, 0.5)
     plt.tight_layout()
     plt.savefig('conference_bias.png')
 
@@ -246,7 +246,7 @@ def create_voterteam_pair(input_csv: str, master_csv: str, min_votes: int = 500)
     plt.tight_layout()
     plt.savefig('voterteam_bias.png')
 
-def create_seasonteam_pair(input_csv: str):
+def create_seasonteam_pair_old(input_csv: str):
     df = pd.read_csv(input_csv)
     df = df.sort_values('bias1-a')
     
@@ -359,7 +359,7 @@ def create_svc_graph_uncorrected(input_csv: str):
     plt.tight_layout()
     plt.savefig('conference_bias.png')
 
-def create_voterteam_pair(input_csv: str, master_csv: str, min_votes: int = 500):
+def create_voterteam_pair(input_csv: str, master_csv: str, min_votes: int = 0):
     analysis_df = pd.read_csv(master_csv)
     voter_vote_counts = analysis_df.groupby('pollster (v)').size().reset_index()
     voter_vote_counts.columns = ['voter', 'total_votes']
@@ -371,6 +371,7 @@ def create_voterteam_pair(input_csv: str, master_csv: str, min_votes: int = 500)
     df = df[df['total_votes'] >= min_votes]
     
     df = df.sort_values('bias1-a')
+    df['bias1-a'] = df['bias1-a'] * 2 - 1
     bottom_5 = df.head(5)
     top_5 = df.tail(5)
     df_plot = pd.concat([bottom_5, top_5])
@@ -393,11 +394,15 @@ def create_voterteam_pair(input_csv: str, master_csv: str, min_votes: int = 500)
 
 def create_seasonteam_pair(input_csv: str):
     df = pd.read_csv(input_csv)
+    df = df.groupby(['season', 'team']).agg({'bias1-a': 'mean'}).reset_index()
     df = df.sort_values('bias1-a')
+    df['bias1-a'] = df['bias1-a'] * 2 - 1
+    print(df)
     
     bottom_5 = df.head(5)
     top_5 = df.tail(5)
     print("TOP", top_5)
+    print("BOTTOM 5", bottom_5)
     df_plot = pd.concat([bottom_5, top_5])
     
     df_plot['label'] = df_plot['season'].astype(str) + ' - ' + df_plot['team']
@@ -411,6 +416,8 @@ def create_seasonteam_pair(input_csv: str):
         print(bar)
         bar.set_color(color)
     
+    plt.xticks([-1, -0.8, -0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6, 0.8, 1], fontsize=21) 
+    plt.xlim(-1, 1)
     plt.xticks(fontsize=21) 
     plt.yticks(fontsize=14) 
     plt.axvline(x=0, color='black', linestyle='-', linewidth=1.5)
@@ -483,6 +490,7 @@ def create_seasonteam_pair_nc(input_csv: str):
 
 if __name__ == "__main__":
     #graph_weekly_bias("/Users/albertbogdan/IML-FALL2025---Voter-Bias/results/cfb/output_data/season_week_relative.csv")
-    create_svc_graph("results/cfb/output_data/conference_bias_relative.csv")
+    #create_svc_graph("results/cfb/output_data/conference_bias_relative.csv")
     # create_voterteam_pair_nc("output_data/cfb/average_biases/average_biases.csv", "output_data/cfb/cfb_master_bias.csv")
-    #create_voterteam_pair("/Users/albertbogdan/IML-FALL2025---Voter-Bias/results/cfb/output_data/voter_team_relative.csv", "/Users/albertbogdan/IML-FALL2025---Voter-Bias/results/cfb/original_data/master_bias_relative.csv")
+    create_voterteam_pair("/Users/albertbogdan/IML-FALL2025---Voter-Bias/results/cfb/output_data/voter_team_relative.csv", "/Users/albertbogdan/IML-FALL2025---Voter-Bias/results/cfb/original_data/master_bias_relative.csv")
+    #create_seasonteam_pair("/Users/albertbogdan/IML-FALL2025---Voter-Bias/results/cfb/output_data/season_voter_team_relative.csv")
