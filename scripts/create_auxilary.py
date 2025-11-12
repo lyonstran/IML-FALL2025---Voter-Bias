@@ -356,65 +356,65 @@ def biases_summary_by_voter(csv_path: str):
 # ^^^^^old^^^^^
 #\/\/\/\corrected (right number of rows) /\/\/\/
 
-# def create_voter_team(csv_path: str):  # <- uses msater_bias.csv to do this
-#     df_input = pd.read_csv(csv_path)
-#     df_input = df_input.sort_values(['Pollster (v)', 'Team (t)'])
+def create_voter_team(csv_path: str):  # <- uses msater_bias.csv to do this
+    df_input = pd.read_csv(csv_path)
+    df_input = df_input.sort_values(['Pollster (v)', 'Team (t)'])
 
-#     df_summary = pd.DataFrame(columns=[
-#         "voter", "team",
-#         "bias1", "bias2", "bias3",
-#         "bias0_ap", "bias0_mean", "n"
-#     ])
+    df_summary = pd.DataFrame(columns=[
+        "voter", "team",
+        "bias1", "bias2", "bias3",
+        "bias0_ap", "bias0_mean", "n"
+    ])
 
-#     for (voter, team), group in df_input.groupby(['Pollster (v)', 'Team (t)'], sort=False):
-#         new_row = {
-#             'voter': voter,
-#             'team': team,
-#             'bias1': group["bias1(v, t)"].mean(),
-#             'bias2': group["bias2(v, t)"].mean(),
-#             'bias3': group["bias3(v, t)"].mean(),
-#             'bias0_ap': group["bias0(v, t)_ap"].mean(),
-#             'bias0_mean': group["bias0(v, t)_mean"].mean(),
-#             'n': len(group)
-#         }
-#         df_summary.loc[len(df_summary)] = new_row
+    for (voter, team), group in df_input.groupby(['Pollster (v)', 'Team (t)'], sort=False):
+        new_row = {
+            'voter': voter,
+            'team': team,
+            'bias1': group["bias1(v, t)"].mean(),
+            'bias2': group["bias2(v, t)"].mean(),
+            'bias3': group["bias3(v, t)"].mean(),
+            'bias0_ap': group["bias0(v, t)_ap"].mean(),
+            'bias0_mean': group["bias0(v, t)_mean"].mean(),
+            'n': len(group)
+        }
+        df_summary.loc[len(df_summary)] = new_row
 
-#     numeric_cols = ['bias1', 'bias2', 'bias3', 'bias0_ap', 'bias0_mean']
-#     df_summary[numeric_cols] = df_summary[numeric_cols].astype(float)
+    numeric_cols = ['bias1', 'bias2', 'bias3', 'bias0_ap', 'bias0_mean']
+    df_summary[numeric_cols] = df_summary[numeric_cols].astype(float)
 
-#     df_summary = df_summary.sort_values(['voter', 'team']).reset_index(drop = True)
-#     df_summary.to_csv("voter_team.csv", index = False)
-#     return df_summary
+    df_summary = df_summary.sort_values(['voter', 'team']).reset_index(drop = True)
+    df_summary.to_csv("voter_team.csv", index = False)
+    return df_summary
 
 ##\/\/\/\/newest\/\/\/\/\/
-def create_voter_team(csv_path: str):
-    df = pd.read_csv(csv_path)
-    df = df.sort_values(['voter', 'team'])
+# def create_voter_team(csv_path: str):
+#     df = pd.read_csv(csv_path)
+#     df = df.sort_values(['voter', 'team'])
 
-    grouped = df.groupby(['voter', 'team'], sort = False)
+#     grouped = df.groupby(['voter', 'team'], sort = False)
 
-    df_summary = grouped.agg({
-        'bias1-a': 'mean',
-        'bias1-b': 'mean',
-        'bias1-c': 'mean',
-        'bias2-a': 'mean',
-        'bias2-b': 'mean',
-        'bias2-c': 'mean',
-        'bias3-a': 'mean',
-        'bias3-b': 'mean',
-        'bias3-c': 'mean',
-        'bias0-ap': 'mean',
-        'bias0-mean': 'mean'
-    }).reset_index()
+#     df_summary = grouped.agg({
+#         'bias1-a': 'mean',
+#         'bias1-b': 'mean',
+#         'bias1-c': 'mean',
+#         'bias2-a': 'mean',
+#         'bias2-b': 'mean',
+#         'bias2-c': 'mean',
+#         'bias3-a': 'mean',
+#         'bias3-b': 'mean',
+#         'bias3-c': 'mean',
+#         'bias0-ap': 'mean',
+#         'bias0-mean': 'mean'
+#     }).reset_index()
 
-    df_summary['n'] = grouped.size().values
-    # df_summary.rename(columns = {
-    #     'Pollster (v)': 'voter',
-    #     'Team (t)': 'team'
-    # }, inplace = True)
+#     df_summary['n'] = grouped.size().values
+#     # df_summary.rename(columns = {
+#     #     'Pollster (v)': 'voter',
+#     #     'Team (t)': 'team'
+#     # }, inplace = True)
 
-    df_summary.to_csv("voter_team.csv", index=False)
-    return df_summary
+#     df_summary.to_csv("voter_team.csv", index=False)
+#     return df_summary
 
 
 
