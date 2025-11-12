@@ -389,12 +389,32 @@ def create_voter_team(csv_path: str):  # <- uses msater_bias.csv to do this
 
 
 def create_season_team_biases(csv_path: str):
-    df_input = pd.read_csv(csv_path)
-    counts = df_input.groupby(['season', 'team'], sort=False).size().reset_index(name='n')
-    df_input = df_input.groupby(['season', 'team'], sort=False).agg({'bias1-a': 'mean', 'bias1-b': 'mean', 'bias1-c': 'mean', 'bias2-a': 'mean', 'bias2-b': 'mean', 'bias2-c': 'mean', 'bias3-a': 'mean', 'bias3-b': 'mean', 'bias3-c': 'mean', 'bias0-ap': 'mean', 'bias0-mean': 'mean'}).reset_index()
-    df_input = df_input.merge(counts, on=['season', 'team'])
-    df_input.to_csv("season_team_biases.csv", index=False)
-    return df_input
+    df = pd.read_csv(csv_path)
+    bias_cols = ['bias1-a', 'bias1-b', 'bias1-c', 'bias2-a', 'bias2-b', 'bias2-c', 'bias3-a', 'bias3-b', 'bias3-c', 'bias0-ap', 'bias0-mean']
+    summary = (
+        df.groupby(["season", "team"], as_index=False)
+        [bias_cols]
+        .sum()
+    )
+    summary["n"] = df.groupby(["season", "team"]).size().values
+    summary = summary[["season", "team", "n"] + bias_cols]
+    summary.to_csv("season_team_biases.csv", index=False)
+    print(summary["n"].sum())
+    return summary
+
+# import pandas as pd
+# df = pd.read_csv('master_bias.csv')
+# bias_cols = ["bias1(v, t)", "bias2(v, t)", "bias3(v, t)", "bias0(v, t)", "bias0(v, t)_mean"]
+
+# summary = (
+#     df.groupby(["Pollster (v)", "Team (t)"], as_index=False)
+#       [bias_cols]
+#       .mean()
+# )
+
+# summary["n"] = df.groupby(["Pollster (v)", "Team (t)"]).size().values
+
+# summary = summary[["Pollster (v)", "Team (t)", "n"] + bias_cols]
 
 def create_season_voter_conference_biases(average_biases_csv, cfb_csv: str):
     df_ab = pd.read_csv(average_biases_csv)
@@ -439,4 +459,5 @@ if __name__ == "__main__":
     #create_season_team_biases("output_data/cfb/original/average_biases.csv")
     #biases_summary_by_team("output_data/cfb/relative/cfb_master_relative_percentage_bias.csv")
     #biases_summary_by_voter("results/cfb/original_data/master_bias.csv")
-    #create_voter_team(r'C:\Users\Lyons\OneDrive\Desktop\IML-FALL2025---Voter-Bias\results\cfb\original_data\master_bias.csv')          
+    create_season_team_biases("/Users/albertbogdan/IML-FALL2025---Voter-Bias/results/cfb/output_data/season_voter_team.csv")
+    
