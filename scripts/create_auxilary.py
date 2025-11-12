@@ -356,7 +356,7 @@ def biases_summary_by_voter(csv_path: str):
 # ^^^^^old^^^^^
 #\/\/\/\corrected (right number of rows) /\/\/\/
 
-def create_voter_team(csv_path: str):  # <- uses msater_bias.csv to do this
+def create_voter_team(csv_path: str, cutoff: int):  # <- uses msater_bias.csv to do this
     df_input = pd.read_csv(csv_path)
     df_input = df_input.sort_values(['Pollster (v)', 'Team (t)'])
 
@@ -367,6 +367,9 @@ def create_voter_team(csv_path: str):  # <- uses msater_bias.csv to do this
     ])
 
     for (voter, team), group in df_input.groupby(['Pollster (v)', 'Team (t)'], sort=False):
+        n = len(group)
+        if n < cutoff:
+            continue
         new_row = {
             'voter': voter,
             'team': team,
@@ -375,7 +378,7 @@ def create_voter_team(csv_path: str):  # <- uses msater_bias.csv to do this
             'bias3': group["bias3(v, t)"].mean(),
             'bias0_ap': group["bias0(v, t)_ap"].mean(),
             'bias0_mean': group["bias0(v, t)_mean"].mean(),
-            'n': len(group)
+            'n': n
         }
         df_summary.loc[len(df_summary)] = new_row
 
@@ -383,7 +386,10 @@ def create_voter_team(csv_path: str):  # <- uses msater_bias.csv to do this
     df_summary[numeric_cols] = df_summary[numeric_cols].astype(float)
 
     df_summary = df_summary.sort_values(['voter', 'team']).reset_index(drop = True)
-    df_summary.to_csv("voter_team.csv", index = False)
+    name = "voter_team_cutoff" + str(cutoff) + ".csv"
+    df_summary.to_csv(name, index = False)
+    print(f"Minimum n in final data: {df_summary['n'].min()}")
+    print ("Length of Dataframe for", n, len(df_summary))
     return df_summary
 
 ##\/\/\/\/newest\/\/\/\/\/
@@ -490,5 +496,8 @@ if __name__ == "__main__":
     #create_season_team_biases("output_data/cfb/original/average_biases.csv")
     #biases_summary_by_team("output_data/cfb/relative/cfb_master_relative_percentage_bias.csv")
     #biases_summary_by_voter("results/cfb/original_data/master_bias.csv")
-    create_voter_team(r'C:\Users\Lyons\OneDrive\Desktop\IML-FALL2025---Voter-Bias\results\cfb\output_data\season_voter_team.csv')
-    create_season_team_biases("/Users/albertbogdan/IML-FALL2025---Voter-Bias/results/cfb/output_data/season_voter_team.csv")
+    i = 20
+    while (i <= 200):
+        create_voter_team("/Users/albertbogdan/IML-FALL2025---Voter-Bias/results/cfb/original_data/master_bias.csv", i)
+        i += 20
+    
