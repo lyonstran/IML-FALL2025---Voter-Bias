@@ -486,6 +486,15 @@ def create_voter_conference_biases(average_biases_csv, cfb_csv: str):
     df_ab.to_csv("voter_conference_biases.csv", index=False)
     return df_ab
 
+def create_team_voter(voter_team_cutoff_csv, team_name, column_sort_by: str):
+    df = pd.read_csv(voter_team_cutoff_csv)
+    df = df[df["team"] == team_name]
+    df[column_sort_by] = pd.to_numeric(df[column_sort_by], errors='coerce')
+    df = df.sort_values(by=column_sort_by)
+    
+    df.to_csv("voter_team_cutoff80_unweighted_oklahoma.csv", index=False)
+    return df
+
 
 
 if __name__ == "__main__":
@@ -496,8 +505,9 @@ if __name__ == "__main__":
     #create_season_team_biases("output_data/cfb/original/average_biases.csv")
     #biases_summary_by_team("output_data/cfb/relative/cfb_master_relative_percentage_bias.csv")
     #biases_summary_by_voter("results/cfb/original_data/master_bias.csv")
-    i = 20
-    while (i <= 200):
-        create_voter_team("/Users/albertbogdan/IML-FALL2025---Voter-Bias/results/cfb/original_data/master_bias.csv", i)
-        i += 20
+    # i = 20
+    # while (i <= 20):
+    #     create_voter_team("/Users/albertbogdan/IML-FALL2025---Voter-Bias/results/cfb/original_data/master_bias.csv", 50)
+    #     i += 20
+    create_team_voter("voter_team_cutoff80.csv", "oklahoma-sooners", "bias1")
     

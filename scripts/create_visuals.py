@@ -1,5 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import os
+
 
 def graph_weekly_bias(input_csv: str): # get weekly bias visuals for mean and std
     graph_weekly_bias_mean(input_csv)
@@ -370,16 +372,16 @@ def create_voterteam_pair(input_csv: str, master_csv: str, min_votes: int = 0):
     
     df = df[df['total_votes'] >= min_votes]
     
-    df = df.sort_values('bias1-a')
-    df['bias1-a'] = df['bias1-a'] * 2 - 1
+    df['bias0_mean'] = df['bias0_mean'] * 2 - 1
+    df = df.sort_values('bias0_mean')
     bottom_5 = df.head(5)
     top_5 = df.tail(5)
     df_plot = pd.concat([bottom_5, top_5])
     df_plot['label'] = df_plot['voter'] + ' - ' + df_plot['team']
     
     plt.figure(figsize=(14, 10))
-    bars = plt.barh(df_plot['label'], df_plot['bias1-a'], edgecolor='black', linewidth=1)
-    colors = ['indianred' if x < 0 else 'mediumseagreen' for x in df_plot['bias1-a']]
+    bars = plt.barh(df_plot['label'], df_plot['bias0_mean'], edgecolor='black', linewidth=1)
+    colors = ['indianred' if x < 0 else 'mediumseagreen' for x in df_plot['bias0_mean']]
     for bar, color in zip(bars, colors):
         bar.set_color(color)
     
@@ -390,7 +392,10 @@ def create_voterteam_pair(input_csv: str, master_csv: str, min_votes: int = 0):
     plt.ylabel('Voter/Team', fontsize=12)
     plt.grid(True, alpha=0.3, axis='x')
     plt.tight_layout()
-    plt.savefig('voterteam_bias.png')
+    base_name = os.path.splitext(os.path.basename(input_csv))[0]
+    output_file = f'{base_name}.png'
+    plt.savefig(output_file)
+    plt.close()  
 
 def create_seasonteam_pair(input_csv: str):
     df = pd.read_csv(input_csv)
@@ -492,5 +497,5 @@ if __name__ == "__main__":
     #graph_weekly_bias("/Users/albertbogdan/IML-FALL2025---Voter-Bias/results/cfb/output_data/season_week_relative.csv")
     #create_svc_graph("results/cfb/output_data/conference_bias_relative.csv")
     # create_voterteam_pair_nc("output_data/cfb/average_biases/average_biases.csv", "output_data/cfb/cfb_master_bias.csv")
-    create_voterteam_pair("/Users/albertbogdan/IML-FALL2025---Voter-Bias/results/cfb/output_data/voter_team_relative.csv", "/Users/albertbogdan/IML-FALL2025---Voter-Bias/results/cfb/original_data/master_bias_relative.csv")
+    create_voterteam_pair("/Users/albertbogdan/IML-FALL2025---Voter-Bias/voter_cutoff/weighted/voter_team_cutoff80_weighted_alabama.csv", "/Users/albertbogdan/IML-FALL2025---Voter-Bias/results/cfb/original_data/master_bias_relative.csv", 50)
     #create_seasonteam_pair("/Users/albertbogdan/IML-FALL2025---Voter-Bias/results/cfb/output_data/season_voter_team_relative.csv")
