@@ -373,7 +373,6 @@ def create_voterteam_pair(input_csv: str, master_csv: str, min_votes: int = 0):
     df = df[df['total_votes'] >= min_votes]
     
     
-    
     df['bias0_mean_pct'] = df['bias0_mean'].rank(pct = True) # Percentile determines the plotted value
     df['bias0_mean_pct'] = df['bias0_mean_pct'] * 2 - 1 # standardizes scale to (-1,1)
     df = df.sort_values('bias0_mean_pct')
@@ -506,4 +505,4 @@ if __name__ == "__main__":
     #create_voterteam_pair("/Users/albertbogdan/IML-FALL2025---Voter-Bias/voter_cutoff/weighted/voter_team_cutoff80_weighted_alabama.csv", "/Users/albertbogdan/IML-FALL2025---Voter-Bias/results/cfb/original_data/master_bias_relative.csv", 50)
     #create_seasonteam_pair("/Users/albertbogdan/IML-FALL2025---Voter-Bias/results/cfb/output_data/season_voter_team_relative.csv")
 
-    create_voterteam_pair(r'C:\Users\Lyons\OneDrive\Desktop\IML-FALL2025---Voter-Bias\voter_cutoff\weighted\voter_team_cutoff50_weighted_lsu.csv', r'C:\Users\Lyons\OneDrive\Desktop\IML-FALL2025---Voter-Bias\results\cfb\original_data\master_bias.csv', 50)
+    create_voterteam_pair("voter_cutoff/weighted/voter_team_cutoff50_weighted_michigan.csv", "results/cfb/original_data/master_bias.csv", 50)
