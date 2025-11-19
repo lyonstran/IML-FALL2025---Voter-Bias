@@ -492,7 +492,7 @@ def create_team_voter(voter_team_cutoff_csv, team_name, column_sort_by: str):
     df[column_sort_by] = pd.to_numeric(df[column_sort_by], errors='coerce')
     df = df.sort_values(by=column_sort_by)
     
-    df.to_csv("voter_team_cutoff80_unweighted_oklahoma.csv", index=False)
+    df.to_csv("voter_team_cutoff50_weighted_ohiostate.csv", index=False)
     return df
 
 
@@ -509,5 +509,5 @@ if __name__ == "__main__":
     # while (i <= 20):
     #     create_voter_team("/Users/albertbogdan/IML-FALL2025---Voter-Bias/results/cfb/original_data/master_bias.csv", 50)
     #     i += 20
-    create_team_voter("voter_team_cutoff80.csv", "oklahoma-sooners", "bias1")
+    create_team_voter("voter_team/voter_team_cutoff50.csv", "ohio-state-buckeyes", "bias0_mean")
     
