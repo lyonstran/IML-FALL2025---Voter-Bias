@@ -508,4 +508,4 @@ if __name__ == "__main__":
     #create_voterteam_pair("/Users/albertbogdan/IML-FALL2025---Voter-Bias/voter_cutoff/weighted/voter_team_cutoff80_weighted_alabama.csv", "/Users/albertbogdan/IML-FALL2025---Voter-Bias/results/cfb/original_data/master_bias_relative.csv", 50)
     #create_seasonteam_pair("/Users/albertbogdan/IML-FALL2025---Voter-Bias/results/cfb/output_data/season_voter_team_relative.csv")
 
-    create_voterteam_pair_weighted("voter_team/weighted/voter_team_cutoff80_weighted_ohiostate.csv", "results/cfb/original_data/master_bias.csv", 80)
+    create_voterteam_pair("voter_team/voter_team_cutoff50_weighted_ohiostate.csv", "results/cfb/original_data/master_bias.csv", 50)
