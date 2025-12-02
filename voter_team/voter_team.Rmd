@@ -60,11 +60,12 @@ read_team <- function(path, label) {
 }
 
 team_dfs <- bind_rows(
-  read_team("C:/Users/lyons/OneDrive/Desktop/IML-FALL2025---Voter-Bias/voter_team/voter_team_cutoff50_weighted_alabama.csv", "Alabama"),
+  read_team("C:/Users/lyons/OneDrive/Desktop/IML-FALL2025---Voter-Bias/voter_team/voter_team_cutoff50_weighted_ohiostate.csv", "Ohio State"),
   read_team("C:/Users/lyons/OneDrive/Desktop/IML-FALL2025---Voter-Bias/voter_team/voter_team_cutoff50_weighted_lsu.csv", "LSU"),
   read_team("C:/Users/lyons/OneDrive/Desktop/IML-FALL2025---Voter-Bias/voter_team/voter_team_cutoff50_weighted_michigan.csv", "Michigan"),
-  read_team("C:/Users/lyons/OneDrive/Desktop/IML-FALL2025---Voter-Bias/voter_team/voter_team_cutoff50_weighted_ohiostate.csv", "Ohio State"),
-  read_team("C:/Users/lyons/OneDrive/Desktop/IML-FALL2025---Voter-Bias/voter_team/voter_team_cutoff50_weighted_oklahoma.csv", "Oklahoma")
+  read_team("C:/Users/lyons/OneDrive/Desktop/IML-FALL2025---Voter-Bias/voter_team/voter_team_cutoff50_weighted_alabama.csv", "Alabama"),
+  read_team("C:/Users/lyons/OneDrive/Desktop/IML-FALL2025---Voter-Bias/voter_team/voter_team_cutoff50_weighted_oklahoma.csv", "Oklahoma"),
+  read_team("C:/Users/lyons/OneDrive/Desktop/IML-FALL2025---Voter-Bias/voter_team/voter_team_cutoff50_weighted_illinois.csv", "Illinois")
 )
 
 full_df <- team_dfs |>
@@ -78,16 +79,22 @@ ui <- fluidPage(
   titlePanel("College Football Voter Bias Across the U.S."),
   sidebarLayout(
     sidebarPanel(
-      selectInput("team", "Select Team:", choices = c("Alabama", "LSU", "Ohio State", "Michigan", "Oklahoma")),
+      selectInput("team", "Select Team:", choices = c("Ohio State", "LSU", "Alabama", "Michigan", "Oklahoma", "Illinois")),
       selectInput("bias_metric", "Select Bias Metric:", choices = c("bias1", "bias2", "bias3", "bias0_ap", "bias0_mean"), selected = "bias1")),
     mainPanel(leafletOutput("bias_map", height = 650)
     )
   )
 )
 
+team_coords <- tibble(
+    team_focus = c("Alabama", "Ohio State", "Michigan", "LSU", "Oklahoma", "Illinois"),
+    lon = c(-87.5391, -83.0189, -84.4750, -91.1871, -97.4457, -88.2272),
+    lat = c(33.2140, 40.0040, 42.2780, 30.4133, 35.2059, 40.1020)
+  )
+
 # --- Shiny server ---
 server <- function(input, output, session) {
-
+    
   team_data <- reactive({
     full_df |>
       filter(team_focus == input$team) |>
@@ -127,43 +134,65 @@ server <- function(input, output, session) {
       mutate(lon = lon + rnorm(n(), sd = 0.3), lat = lat + rnorm(n(), sd = 0.3)
       ) |>
       ungroup()
-    bias_range <- max(abs(plot_data$avg_bias), na.rm = TRUE)
-    
-    pal_poly <- colorNumeric(
-      palette = c("#8B0000", "#FF9999", "#E8E8E8", "#99FF99", "#006400"),
-      domain = c(-bias_range, bias_range)
-    )
 
-    bias_range <- max(abs(plot_data$avg_bias), na.rm = TRUE)
+    bias_range <- max(abs(voter_points$bias_value), na.rm = TRUE)
 
     pal_points <- colorNumeric(
-      palette = c("#8B0000", "#FF9999", "#E8E8E8", "#99FF99", "#006400"),
+      palette = colorRampPalette(
+        c("#FF0000", "#FF5555", "#E8E8E8", "#55FF55", "#00FF00")
+      )(200),
       domain = c(-bias_range, bias_range)
     )
 
     leaflet(plot_data) |>
       addProviderTiles("CartoDB.Positron") |>
-
-      addPolygons(
-        fillColor = ~ifelse(has_voters, pal_poly(avg_bias), "#D3D3D3"),
-        fillOpacity = ~ifelse(has_voters, 0.85, 0.4),
-        color = "white",
+    
+     
+      addLabelOnlyMarkers(
+        data = voter_points,
+        lng = ~lon, lat = ~lat,
+        label = ~paste0(city),
+        labelOptions = labelOptions(
+          noHide = TRUE,
+          textsize = "11px",
+          offset = c(10, -10),
+          style = list(
+            "color" = "black",
+            "font-weight" = "bold",
+            "background" = "rgba(255,255,255,0.7)",
+            "padding" = "3px",
+            "border-radius" = "3px"
+          )
+        )
+      ) |>
+    
+    
+      addCircleMarkers(
+        data = voter_points,
+        lng = ~lon, lat = ~lat,
+        radius = 10,
+        stroke = TRUE,
         weight = 1,
-        label = ~paste(
-          NAME,
-          ifelse(has_voters,
-                 paste0("Avg Bias = ", round(avg_bias, 3)),
-                 "No voters")
-        ),
-        highlightOptions = highlightOptions(weight = 3, fillOpacity = 1)
+        color = "black",
+        fillColor = ~pal_points(bias_value),
+        fillOpacity = 0.9,
+        popup = ~popup,
+        label = ~voter
       ) |>
-
-      addCircleMarkers(data = voter_points, lng = ~lon, lat = ~lat, radius = 7, stroke = TRUE, weight = 1, color = "black", fillColor = ~pal_points(bias_value), 
-                       fillOpacity = 0.9, popup = ~popup, label = ~voter
-      ) |>
-
-      addLegend(pal = pal_poly, values = ~avg_bias, title = paste(input$team, input$bias_metric, "(Gray = No Voters)"), position = "bottomright"
+    
+     
+      addCircleMarkers(
+        data = team_coords |> filter(team_focus == input$team),
+        lng = ~lon, lat = ~lat,
+        radius = 14,
+        fillColor = "black",
+        stroke = TRUE,
+        weight = 2,
+        color = "white",
+        fillOpacity = 1,
+        popup = ~paste0("<strong>", team_focus, "</strong><br>Team Home Location")
       )
+   
   })
 }
 
@@ -171,4 +200,11 @@ server <- function(input, output, session) {
 shinyApp(ui, server)
 
 ```
+
+ #TODO: 
+    
+    # add labels showing the cities,  add a big black circle denoting the location of the team -> city on which the team is based 
+    # add team label somewhere -> attached to the black circle 
+    # add ... a legend on the side of that map -> bias bar : color bar from for/positive to against/negative or associate numbers with that 
+
 
