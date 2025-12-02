@@ -453,7 +453,10 @@ def create_voterteam_pair_weighted(input_csv: str, master_csv: str, min_votes: i
     bottom_5 = df.head(5)
     top_5 = df.tail(5)
     df_plot = pd.concat([bottom_5, top_5])
-    df_plot['label'] = df_plot['voter'] + ' - ' + df_plot['team']
+    df_plot['voter'] = df_plot['voter'].str.replace('-', ' ').str.title()
+    df_plot['team'] = df_plot['team'].str.replace('-', ' ').str.title()
+    df_plot['label'] = df_plot['voter'] + ' / ' + df_plot['team']
+    
     
     plt.figure(figsize=(14, 10))
     bars = plt.barh(df_plot['label'], df_plot['bias1'], edgecolor='black', linewidth=1)
@@ -462,9 +465,9 @@ def create_voterteam_pair_weighted(input_csv: str, master_csv: str, min_votes: i
         bar.set_color(color)
     
     plt.xticks(fontsize=21) 
-    plt.yticks(fontsize=14) 
+    plt.yticks(fontsize=19) 
     plt.axvline(x=0, color='black', linestyle='-', linewidth=1.5)
-    plt.xlabel('AP Bias (no correction), scaled by 0.1', fontsize=21)
+    plt.xlabel('AP Bias', fontsize=21)
     plt.ylabel('Voter/Team', fontsize=12)
     plt.grid(True, alpha=0.3, axis='x')
     plt.tight_layout()
@@ -508,4 +511,4 @@ if __name__ == "__main__":
     #create_voterteam_pair("/Users/albertbogdan/IML-FALL2025---Voter-Bias/voter_cutoff/weighted/voter_team_cutoff80_weighted_alabama.csv", "/Users/albertbogdan/IML-FALL2025---Voter-Bias/results/cfb/original_data/master_bias_relative.csv", 50)
     #create_seasonteam_pair("/Users/albertbogdan/IML-FALL2025---Voter-Bias/results/cfb/output_data/season_voter_team_relative.csv")
 
-    create_voterteam_pair("voter_team/voter_team_cutoff50_weighted_ohiostate.csv", "results/cfb/original_data/master_bias.csv", 50)
+    create_voterteam_pair_weighted("voter_team/voter_team_cutoff50_unweighted.csv", "results/cfb/original_data/master_bias.csv", 50)
