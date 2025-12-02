@@ -86,9 +86,15 @@ ui <- fluidPage(
   )
 )
 
+team_coords <- tibble(
+    team_focus = c("Alabama", "Ohio State", "Michigan", "LSU", "Oklahoma", "Illinois"),
+    lon = c(-87.5391, -83.0189, -84.4750, -91.1871, -97.4457, -88.2272),
+    lat = c(33.2140, 40.0040, 42.2780, 30.4133, 35.2059, 40.1020)
+  )
+
 # --- Shiny server ---
 server <- function(input, output, session) {
-
+    
   team_data <- reactive({
     full_df |>
       filter(team_focus == input$team) |>
@@ -129,27 +135,64 @@ server <- function(input, output, session) {
       ) |>
       ungroup()
 
-    bias_range <- max(abs(plot_data$avg_bias), na.rm = TRUE)
+    bias_range <- max(abs(voter_points$bias_value), na.rm = TRUE)
+
     pal_points <- colorNumeric(
-      palette = c("#8B0000", "#FF9999", "#E8E8E8", "#99FF99", "#006400"),
+      palette = colorRampPalette(
+        c("#FF0000", "#FF5555", "#E8E8E8", "#55FF55", "#00FF00")
+      )(200),
       domain = c(-bias_range, bias_range)
     )
 
     leaflet(plot_data) |>
       addProviderTiles("CartoDB.Positron") |>
-      
-
-      addCircleMarkers(data = voter_points, 
-                       lng = ~lon, lat = ~lat, radius = 10, stroke = TRUE, weight = 1, color = "black", fillColor = ~pal_points(bias_value), 
-                       fillOpacity = 0.9, popup = ~popup, 
-                       label = ~voter)
     
-    #TODO: 
+     
+      addLabelOnlyMarkers(
+        data = voter_points,
+        lng = ~lon, lat = ~lat,
+        label = ~paste0(city),
+        labelOptions = labelOptions(
+          noHide = TRUE,
+          textsize = "11px",
+          offset = c(10, -10),
+          style = list(
+            "color" = "black",
+            "font-weight" = "bold",
+            "background" = "rgba(255,255,255,0.7)",
+            "padding" = "3px",
+            "border-radius" = "3px"
+          )
+        )
+      ) |>
     
-    # add labels showing the cities,  add a big black circle denoting the location of the team -> city on which the team is based 
-    # add team label somewhere -> attached to the black circle 
-    # add ... a legend on the side of that map -> bias bar : color bar from for/positive to against/negative or associate numbers with that 
-    # experiment with a greater color range (colors look a little bit faded right now. make the colors 'funkier'/ highlighted)
+    
+      addCircleMarkers(
+        data = voter_points,
+        lng = ~lon, lat = ~lat,
+        radius = 10,
+        stroke = TRUE,
+        weight = 1,
+        color = "black",
+        fillColor = ~pal_points(bias_value),
+        fillOpacity = 0.9,
+        popup = ~popup,
+        label = ~voter
+      ) |>
+    
+     
+      addCircleMarkers(
+        data = team_coords |> filter(team_focus == input$team),
+        lng = ~lon, lat = ~lat,
+        radius = 14,
+        fillColor = "black",
+        stroke = TRUE,
+        weight = 2,
+        color = "white",
+        fillOpacity = 1,
+        popup = ~paste0("<strong>", team_focus, "</strong><br>Team Home Location")
+      )
+   
   })
 }
 
@@ -157,4 +200,11 @@ server <- function(input, output, session) {
 shinyApp(ui, server)
 
 ```
+
+ #TODO: 
+    
+    # add labels showing the cities,  add a big black circle denoting the location of the team -> city on which the team is based 
+    # add team label somewhere -> attached to the black circle 
+    # add ... a legend on the side of that map -> bias bar : color bar from for/positive to against/negative or associate numbers with that 
+
 
