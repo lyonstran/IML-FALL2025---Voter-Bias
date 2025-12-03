@@ -455,6 +455,8 @@ def create_voterteam_pair_weighted(input_csv: str, master_csv: str, min_votes: i
     df_plot = pd.concat([bottom_5, top_5])
     df_plot['voter'] = df_plot['voter'].str.replace('-', ' ').str.title()
     df_plot['team'] = df_plot['team'].str.replace('-', ' ').str.title()
+    df_plot['team'] = df_plot['team'].apply(lambda x: ' '.join(x.split()[:2]))
+    df_plot.loc[df_plot['team'] == "Texas Am", 'team'] = "Texas A&M"
     df_plot['label'] = df_plot['voter'] + ' / ' + df_plot['team']
     
     
@@ -468,7 +470,7 @@ def create_voterteam_pair_weighted(input_csv: str, master_csv: str, min_votes: i
     plt.yticks(fontsize=19) 
     plt.axvline(x=0, color='black', linestyle='-', linewidth=1.5)
     plt.xlabel('AP Bias', fontsize=21)
-    plt.ylabel('Voter/Team', fontsize=12)
+    plt.ylabel('Voter/Team', fontsize=21)
     plt.grid(True, alpha=0.3, axis='x')
     plt.tight_layout()
     base_name = os.path.splitext(os.path.basename(input_csv))[0]
