@@ -457,6 +457,9 @@ def create_voterteam_pair_weighted(input_csv: str, master_csv: str, min_votes: i
     df_plot['team'] = df_plot['team'].str.replace('-', ' ').str.title()
     df_plot['team'] = df_plot['team'].apply(lambda x: ' '.join(x.split()[:2]))
     df_plot.loc[df_plot['team'] == "Texas Am", 'team'] = "Texas A&M"
+    df_plot.loc[df_plot['team'] == "Baylor Bears", 'team'] = "Baylor"
+    df_plot.loc[df_plot['team'] == "Georgia Bulldogs", 'team'] = "Georgia"
+    df_plot.loc[df_plot['team'] == "Clemson Tigers", 'team'] = "Clemson"
     df_plot['label'] = df_plot['voter'] + ' / ' + df_plot['team']
     
     
