@@ -138,7 +138,7 @@ server <- function(input, output, session) {
 
     pal_points <- colorNumeric(
       palette = colorRampPalette(
-        c("#FF0000", "#FF5555", "#E8E8E8", "#55FF55", "#00FF00")
+        c("#FF0000","#FFFFFF", "#00FF00")
       )(200),
       domain = c(-bias_range, bias_range)
     )
@@ -148,16 +148,17 @@ server <- function(input, output, session) {
     leaflet(plot_data) |>
       addProviderTiles("CartoDB.Positron") |>
     
-      addLabelOnlyMarkers(data = voter_points, lng = ~lon, lat = ~lat, label = ~paste0(city), 
-                          labelOptions = labelOptions(noHide = TRUE, textsize = "12px", 
-                                                      offset = c(10, -10), style = list(
-            "color" = "black",
-            "font-weight" = "bold",
-            "background" = "rgba(255,255,255,0.7)",
-            "padding" = "3px",
-            "border-radius" = "3px"
-          )
-        )
+      addLabelOnlyMarkers(data = voter_points, lng = ~lon, lat = ~lat, 
+        # label = ~paste0(city),
+        # labelOptions = labelOptions(noHide = TRUE, textsize = "12px",
+        # offset = c(-10, -20), style = list(
+        # "color" = "black",
+        # "font-weight" = "bold",
+        # "background" = "rgba(255,255,255,0.7)",
+        # "padding" = "3px",
+        # "border-radius" = "3px"
+        # )
+        # )
       ) |>
     
       addCircleMarkers(
@@ -176,14 +177,21 @@ server <- function(input, output, session) {
       
       # https://rstudio.github.io/leaflet/articles/markers.html
       
-      addAwesomeMarkers(
+      addAwesomeMarkers(label = ~paste0(team_focus), labelOptions = labelOptions(noHide = TRUE, textsize = "20px", 
+                                                      offset = c(-10, -20), style = list(
+            "color" = "black",
+            "font-weight" = "bold",
+            "background" = "rgba(255,255,255,0.7)",
+            "padding" = "3px",
+            "border-radius" = "3px"
+          )),
         data = team_coords |> filter(team_focus == input$team),
-        lng = ~lon, lat = ~lat, icon = awesomeIcons(icon = "circle", iconColor = "blue", markerColor = "blue", library = "fa"), popup = ~paste("Team:", team_focus, "Home Location")
+        lng = ~lon, lat = ~lat, icon = awesomeIcons(icon = "circle", iconColor = "black", markerColor = "black", library = "fa"), popup = ~paste("Team:", team_focus, "Home Location")
       ) |>
     
       
       addLegend(position = "bottomright", pal = pal_points,
-        values = voter_points$bias_value, title = paste0("Bias (", input$bias_metric, ")"),
+        values = voter_points$bias_value, title = paste0("Bias"),
         labFormat = labelFormat(digits = 3), opacity = 1
       ) |>
       
@@ -205,8 +213,7 @@ shinyApp(ui, server)
 
  #TODO: 
     
-    # add labels showing the cities,  add a big black circle denoting the location of the team -> city on which the team is based 
-    # add team label somewhere -> attached to the black circle 
-    # add ... a legend on the side of that map -> bias bar : color bar from for/positive to against/negative or associate numbers with that 
+    # maybe add additional teams ? 
+    # 
 
 
