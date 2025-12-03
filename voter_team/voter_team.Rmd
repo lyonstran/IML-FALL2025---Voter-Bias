@@ -78,9 +78,9 @@ full_df <- team_dfs |>
 ui <- fluidPage(
   titlePanel("College Football Voter Bias Across the U.S."),
   sidebarLayout(
-    sidebarPanel(
-      selectInput("team", "Select Team:", choices = c("Ohio State", "LSU", "Alabama", "Michigan", "Oklahoma", "Illinois")),
-      selectInput("bias_metric", "Select Bias Metric:", choices = c("bias1", "bias2", "bias3", "bias0_ap", "bias0_mean"), selected = "bias1")),
+    sidebarPanel(selectInput("team", "Select Team: (Blue pin represents home location) ", choices = c("Ohio State", "LSU", "Alabama", "Michigan", "Oklahoma", "Illinois")), 
+                 selectInput("bias_metric", "Select Bias Metric:", choices = c("bias1", "bias2", "bias3", "bias0_ap", "bias0_mean"), selected = "bias1")
+                 ),
     mainPanel(leafletOutput("bias_map", height = 650)
     )
   )
@@ -123,8 +123,7 @@ server <- function(input, output, session) {
       left_join(state_points, by = c("state" = "ABBREV")) |>
       filter(!is.na(lon), !is.na(lat)) |>
       mutate(
-        popup = paste0(
-          "<strong>", voter, "</strong>",
+        popup = paste0(voter,
           "City: ", city, ", ", state, "",
           "Bias (", input$bias_metric, "): ", round(bias_value, 3), "",
           "Votes (n): ", n
@@ -144,19 +143,14 @@ server <- function(input, output, session) {
       domain = c(-bias_range, bias_range)
     )
 
+    
+    # https://rstudio.github.io/leaflet/reference/index.html <- documentation
     leaflet(plot_data) |>
       addProviderTiles("CartoDB.Positron") |>
     
-     
-      addLabelOnlyMarkers(
-        data = voter_points,
-        lng = ~lon, lat = ~lat,
-        label = ~paste0(city),
-        labelOptions = labelOptions(
-          noHide = TRUE,
-          textsize = "11px",
-          offset = c(10, -10),
-          style = list(
+      addLabelOnlyMarkers(data = voter_points, lng = ~lon, lat = ~lat, label = ~paste0(city), 
+                          labelOptions = labelOptions(noHide = TRUE, textsize = "12px", 
+                                                      offset = c(10, -10), style = list(
             "color" = "black",
             "font-weight" = "bold",
             "background" = "rgba(255,255,255,0.7)",
@@ -165,7 +159,6 @@ server <- function(input, output, session) {
           )
         )
       ) |>
-    
     
       addCircleMarkers(
         data = voter_points,
@@ -180,25 +173,34 @@ server <- function(input, output, session) {
         label = ~voter
       ) |>
     
-     
-      addCircleMarkers(
+      
+      # https://rstudio.github.io/leaflet/articles/markers.html
+      
+      addAwesomeMarkers(
         data = team_coords |> filter(team_focus == input$team),
-        lng = ~lon, lat = ~lat,
-        radius = 14,
-        fillColor = "black",
-        stroke = TRUE,
-        weight = 2,
-        color = "white",
-        fillOpacity = 1,
-        popup = ~paste0("<strong>", team_focus, "</strong><br>Team Home Location")
+        lng = ~lon, lat = ~lat, icon = awesomeIcons(icon = "circle", iconColor = "blue", markerColor = "blue", library = "fa"), popup = ~paste("Team:", team_focus, "Home Location")
+      ) |>
+    
+      
+      addLegend(position = "bottomright", pal = pal_points,
+        values = voter_points$bias_value, title = paste0("Bias (", input$bias_metric, ")"),
+        labFormat = labelFormat(digits = 3), opacity = 1
+      ) |>
+      
+      addLegend(
+        position = "bottomleft",
+        colors = pal_points(c(-bias_range, 0, bias_range)),
+        labels = c("Against", "Neutral", "For"),
+        title = "Bias Direction",
+        opacity = 1,
+        labFormat = labelFormat(digits = 2)
       )
-   
+    
   })
 }
 
 # --- Run app ---
 shinyApp(ui, server)
-
 ```
 
  #TODO: 
