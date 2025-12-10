@@ -560,5 +560,5 @@ if __name__ == "__main__":
     #     "south-carolina-gamecocks",
     # ]
     for i in range (1):
-        create_team_voter("voter_team/voter_team_cutoff50_weighted.csv", "fighting-illini", "bias1")
+        create_team_voter("results/cfb/output_data/voter_team.csv", "illinois-fighting-illini", "bias1")
     
