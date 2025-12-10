@@ -60,12 +60,41 @@ read_team <- function(path, label) {
 }
 
 team_dfs <- bind_rows(
-  read_team("C:/Users/lyons/OneDrive/Desktop/IML-FALL2025---Voter-Bias/voter_team/voter_team_cutoff50_weighted_ohiostate.csv", "Ohio State"),
-  read_team("C:/Users/lyons/OneDrive/Desktop/IML-FALL2025---Voter-Bias/voter_team/voter_team_cutoff50_weighted_lsu.csv", "LSU"),
-  read_team("C:/Users/lyons/OneDrive/Desktop/IML-FALL2025---Voter-Bias/voter_team/voter_team_cutoff50_weighted_michigan.csv", "Michigan"),
-  read_team("C:/Users/lyons/OneDrive/Desktop/IML-FALL2025---Voter-Bias/voter_team/voter_team_cutoff50_weighted_alabama.csv", "Alabama"),
-  read_team("C:/Users/lyons/OneDrive/Desktop/IML-FALL2025---Voter-Bias/voter_team/voter_team_cutoff50_weighted_oklahoma.csv", "Oklahoma"),
-  read_team("C:/Users/lyons/OneDrive/Desktop/IML-FALL2025---Voter-Bias/voter_team/voter_team_cutoff50_weighted_illinois.csv", "Illinois")
+  read_team("C:/Users/lyons/OneDrive/Desktop/IML-FALL2025---Voter-Bias/voter_team/voter_team_cutoff50_weighted_ohiostate.csv", "Ohio State University"),
+  read_team("C:/Users/lyons/OneDrive/Desktop/IML-FALL2025---Voter-Bias/voter_team/voter_team_cutoff50_weighted_lsu.csv", "Louisiana State University"),
+  read_team("C:/Users/lyons/OneDrive/Desktop/IML-FALL2025---Voter-Bias/voter_team/voter_team_cutoff50_weighted_michigan.csv", "University of Michigan"),
+  read_team("C:/Users/lyons/OneDrive/Desktop/IML-FALL2025---Voter-Bias/voter_team/voter_team_cutoff50_weighted_alabama.csv", "University of Alabama"),
+  read_team("C:/Users/lyons/OneDrive/Desktop/IML-FALL2025---Voter-Bias/voter_team/voter_team_cutoff50_weighted_oklahoma.csv", "University of Oklahoma"),
+  
+  
+  read_team("C:/Users/lyons/OneDrive/Desktop/IML-FALL2025---Voter-Bias/voter_team_to_add/voter_team_cutoff50_weighted_auburn-tigers.csv", "Auburn"),
+  read_team("C:/Users/lyons/OneDrive/Desktop/IML-FALL2025---Voter-Bias/voter_team_to_add/voter_team_cutoff50_weighted_baylor-bears.csv", "Baylor"),
+  read_team("C:/Users/lyons/OneDrive/Desktop/IML-FALL2025---Voter-Bias/voter_team_to_add/voter_team_cutoff50_weighted_boise-state-broncos.csv", "Boise"),
+  read_team("C:/Users/lyons/OneDrive/Desktop/IML-FALL2025---Voter-Bias/voter_team_to_add/voter_team_cutoff50_weighted_cincinnati-bearcats.csv", "Cincinatti"),
+  read_team("C:/Users/lyons/OneDrive/Desktop/IML-FALL2025---Voter-Bias/voter_team_to_add/voter_team_cutoff50_weighted_clemson-tigers.csv", "Clemson"),
+  read_team("C:/Users/lyons/OneDrive/Desktop/IML-FALL2025---Voter-Bias/voter_team_to_add/voter_team_cutoff50_weighted_florida-gators.csv", "University of Florida"),
+  read_team("C:/Users/lyons/OneDrive/Desktop/IML-FALL2025---Voter-Bias/voter_team_to_add/voter_team_cutoff50_weighted_florida-state-seminoles.csv", "Florida State"),
+  read_team("C:/Users/lyons/OneDrive/Desktop/IML-FALL2025---Voter-Bias/voter_team_to_add/voter_team_cutoff50_weighted_georgia-bulldogs.csv", "University of Georgia"),
+  read_team("C:/Users/lyons/OneDrive/Desktop/IML-FALL2025---Voter-Bias/voter_team_to_add/voter_team_cutoff50_weighted_iowa-hawkeyes.csv", "University of Iowa"),
+  read_team("C:/Users/lyons/OneDrive/Desktop/IML-FALL2025---Voter-Bias/voter_team_to_add/voter_team_cutoff50_weighted_kansas-state-wildcats.csv", "Kansas State University"),
+  read_team("C:/Users/lyons/OneDrive/Desktop/IML-FALL2025---Voter-Bias/voter_team_to_add/voter_team_cutoff50_weighted_miami-fl-hurricanes.csv", "University of Miami"),
+  read_team("C:/Users/lyons/OneDrive/Desktop/IML-FALL2025---Voter-Bias/voter_team_to_add/voter_team_cutoff50_weighted_michigan-state-spartans.csv", "Michigan State"),
+  read_team("C:/Users/lyons/OneDrive/Desktop/IML-FALL2025---Voter-Bias/voter_team_to_add/voter_team_cutoff50_weighted_north-carolina-tar-heels.csv", "University of North Carolina at Chapel Hill"),
+  read_team("C:/Users/lyons/OneDrive/Desktop/IML-FALL2025---Voter-Bias/voter_team_to_add/voter_team_cutoff50_weighted_notre-dame-fighting-irish.csv", "University of Notre Dame"),
+  read_team("C:/Users/lyons/OneDrive/Desktop/IML-FALL2025---Voter-Bias/voter_team_to_add/voter_team_cutoff50_weighted_oklahoma-state-cowboys.csv", "Oklahoma State"),
+  read_team("C:/Users/lyons/OneDrive/Desktop/IML-FALL2025---Voter-Bias/voter_team_to_add/voter_team_cutoff50_weighted_ole-miss-rebels.csv", "University of Mississippi"),
+  read_team("C:/Users/lyons/OneDrive/Desktop/IML-FALL2025---Voter-Bias/voter_team_to_add/voter_team_cutoff50_weighted_oregon-ducks.csv", "University of Oregon"),
+  read_team("C:/Users/lyons/OneDrive/Desktop/IML-FALL2025---Voter-Bias/voter_team_to_add/voter_team_cutoff50_weighted_penn-state-nittany-lions.csv", "Penn State"),
+  read_team("C:/Users/lyons/OneDrive/Desktop/IML-FALL2025---Voter-Bias/voter_team_to_add/voter_team_cutoff50_weighted_stanford-cardinal.csv", "Stanford University"),
+  read_team("C:/Users/lyons/OneDrive/Desktop/IML-FALL2025---Voter-Bias/voter_team_to_add/voter_team_cutoff50_weighted_tcu-horned-frogs.csv", "Texas Christian University"),
+  read_team("C:/Users/lyons/OneDrive/Desktop/IML-FALL2025---Voter-Bias/voter_team_to_add/voter_team_cutoff50_weighted_tennessee-volunteers.csv", "University of Tennessee"),
+  read_team("C:/Users/lyons/OneDrive/Desktop/IML-FALL2025---Voter-Bias/voter_team_to_add/voter_team_cutoff50_weighted_texas-am-aggies.csv", "Texas A&M University"),
+  read_team("C:/Users/lyons/OneDrive/Desktop/IML-FALL2025---Voter-Bias/voter_team_to_add/voter_team_cutoff50_weighted_texas-longhorns.csv", "University of Texas"),
+  read_team("C:/Users/lyons/OneDrive/Desktop/IML-FALL2025---Voter-Bias/voter_team_to_add/voter_team_cutoff50_weighted_usc-trojans.csv", "University of Southern California"),
+  read_team("C:/Users/lyons/OneDrive/Desktop/IML-FALL2025---Voter-Bias/voter_team_to_add/voter_team_cutoff50_weighted_utah-utes.csv", "University of Utah"),
+  read_team("C:/Users/lyons/OneDrive/Desktop/IML-FALL2025---Voter-Bias/voter_team_to_add/voter_team_cutoff50_weighted_washington-huskies.csv", "University of Washington"),
+  read_team("C:/Users/lyons/OneDrive/Desktop/IML-FALL2025---Voter-Bias/voter_team_to_add/voter_team_cutoff50_weighted_wisconsin-badgers.csv", "University of Wisconsin-Madison"),
+  
 )
 
 full_df <- team_dfs |>
@@ -78,7 +107,40 @@ full_df <- team_dfs |>
 ui <- fluidPage(
   titlePanel("College Football Voter Bias Across the U.S."),
   sidebarLayout(
-    sidebarPanel(selectInput("team", "Select Team: (Blue pin represents home location) ", choices = c("Ohio State", "LSU", "Alabama", "Michigan", "Oklahoma", "Illinois")), 
+    sidebarPanel(selectInput("team", "Select Team: (Blue pin represents home location) ", 
+                             choices = 
+                               c("Ohio State University", 
+                                 "Louisiana State University", 
+                                 "University of Alabama", 
+                                 "University of Michigan", 
+                                 "University of Oklahoma",
+                                 "Auburn University",
+                                 "Baylor Univeristy",
+                                 "Boise State University",
+                                 "University of Cincinnati",
+                                 "Clemson University",
+                                 "University of Florida",
+                                 "Florida State",
+                                 "University of Georgia",
+                                 "University of Iowa",
+                                 "Kansas State University",
+                                 "University of Miami",
+                                 "Michigan State",
+                                 "University of North Carolina at Chapel Hill",
+                                 "University of Notre Dame",
+                                 "Oklahoma State",
+                                 "University of Mississippi",
+                                 "University of Oregon",
+                                 "Penn State",
+                                 "Stanford University",
+                                 "Texas Christian University",
+                                 "University of Tennessee",
+                                 "Texas A&M University",
+                                 "University of Texas",
+                                 "University of Southern California",
+                                 "University of Utah",
+                                 "University of Washington",
+                                 "University of Wisconsin-Madison")), 
                  selectInput("bias_metric", "Select Bias Metric:", choices = c("bias1", "bias2", "bias3", "bias0_ap", "bias0_mean"), selected = "bias1")
                  ),
     mainPanel(leafletOutput("bias_map", height = 650)
@@ -87,10 +149,109 @@ ui <- fluidPage(
 )
 
 team_coords <- tibble(
-    team_focus = c("Alabama", "Ohio State", "Michigan", "LSU", "Oklahoma", "Illinois"),
-    lon = c(-87.5391, -83.0189, -84.4750, -91.1871, -97.4457, -88.2272),
-    lat = c(33.2140, 40.0040, 42.2780, 30.4133, 35.2059, 40.1020)
+  team_focus = c(
+    "Ohio State University",
+    "LSU",
+    "University of Alabama",
+    "University of Michigan",
+    "University of Oklahoma",
+    "Auburn",
+    "Baylor",
+    "Boise",
+    "Cincinatti",
+    "Clemson",
+    "University of Florida",
+    "Florida State",
+    "University of Georgia",
+    "University of Iowa",
+    "Kansas State University",
+    "University of Miami",
+    "Michigan State",
+    "University of North Carolina at Chapel Hill",
+    "University of Notre Dame",
+    "Oklahoma State",
+    "University of Mississippi",
+    "University of Oregon",
+    "Penn State",
+    "Stanford University",
+    "Texas Christian University",
+    "University of Tennessee",
+    "Texas A&M University",
+    "University of Texas",
+    "University of Southern California",
+    "University of Utah",
+    "University of Washington",
+    "University of Wisconsin-Madison"
+  ),
+  lon = c(
+    -83.0189,   # Ohio State 
+    -91.1871,   # LSU 
+    -87.5391,   # Alabama
+    -84.4750,   # Michigan 
+    -97.4457,   # Oklahoma 
+    -85.4808,   # Auburn 
+    -97.1131,   # Baylor 
+    -116.2023,  # Boise 
+    -84.5120,   # Cincinnati 
+    -82.8350,   # Clemson 
+    -82.3549,   # Florida 
+    -84.2985,   # Florida State 
+    -83.3730,   # Georgia 
+    -91.5302,   # Iowa 
+    -96.5847,   # Kansas State 
+    -80.2781,   # Miami 
+    -84.4804,   # Michigan State 
+    -79.0512,   # UNC Chapel Hill
+    -86.2353,   # Notre Dame 
+    -96.9289,   # Oklahoma State 
+    -89.5333,   # Ole Miss 
+    -123.0686,  # Oregon
+    -77.8600,   # Penn State 
+    -122.1700,  # Stanford
+    -97.3327,   # TCU 
+    -83.9295,   # Tennessee 
+    -96.3344,   # Texas A&M 
+    -97.7333,   # Texas 
+    -118.2851,  # USC 
+    -111.8547,  # Utah 
+    -122.3035,  # Washington 
+    -89.4008    # Wisconsin 
+  ),
+  lat = c(
+    40.0040, 
+    30.4133,  
+    33.2140, 
+    42.2780,  
+    35.2059, 
+    32.6099,  
+    31.5487,  
+    43.6038, 
+    39.1329, 
+    34.6834,  
+    29.6516,  
+    30.4420, 
+    33.9480, 
+    41.6611, 
+    39.1850,  
+    25.7215, 
+    42.7018,  
+    35.9049,  
+    41.7032,  
+    36.1157,  
+    34.3665,  
+    44.0448, 
+    40.7982,  
+    37.4275,  
+    32.7093,  
+    35.9550,  
+    30.6187, 
+    30.2849,  
+    34.0224,  
+    40.7649,  
+    47.6553, 
+    43.0731   
   )
+)
 
 # --- Shiny server ---
 server <- function(input, output, session) {
@@ -210,10 +371,4 @@ server <- function(input, output, session) {
 # --- Run app ---
 shinyApp(ui, server)
 ```
-
- #TODO: 
-    
-    # maybe add additional teams ? 
-    # 
-
 
