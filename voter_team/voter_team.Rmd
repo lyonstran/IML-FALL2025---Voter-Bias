@@ -60,6 +60,8 @@ read_team <- function(path, label) {
 }
 
 team_dfs <- bind_rows(
+  read_team("C:/Users/lyons/OneDrive/Desktop/IML-FALL2025---Voter-Bias/voter_team_to_add/voter_team_cutoff0_weighted_illinois-fighting-illini.csv","University of Illinois Urbana-Champaign"),
+  
   read_team("C:/Users/lyons/OneDrive/Desktop/IML-FALL2025---Voter-Bias/voter_team/voter_team_cutoff50_weighted_ohiostate.csv", "Ohio State University"),
   read_team("C:/Users/lyons/OneDrive/Desktop/IML-FALL2025---Voter-Bias/voter_team/voter_team_cutoff50_weighted_lsu.csv", "Louisiana State University"),
   read_team("C:/Users/lyons/OneDrive/Desktop/IML-FALL2025---Voter-Bias/voter_team/voter_team_cutoff50_weighted_michigan.csv", "University of Michigan"),
@@ -109,7 +111,8 @@ ui <- fluidPage(
   sidebarLayout(
     sidebarPanel(selectInput("team", "Select Team: (Blue pin represents home location) ", 
                              choices = 
-                               c("Ohio State University", 
+                               c("University of Illinois Urbana-Champaign",
+                                 "Ohio State University", 
                                  "Louisiana State University", 
                                  "University of Alabama", 
                                  "University of Michigan", 
@@ -150,6 +153,7 @@ ui <- fluidPage(
 
 team_coords <- tibble(
   team_focus = c(
+    "University of Illinois Urbana-Champaign",
     "Ohio State University",
     "LSU",
     "University of Alabama",
@@ -184,6 +188,7 @@ team_coords <- tibble(
     "University of Wisconsin-Madison"
   ),
   lon = c(
+    -88.2283,   # UIUC
     -83.0189,   # Ohio State 
     -91.1871,   # LSU 
     -87.5391,   # Alabama
@@ -218,6 +223,7 @@ team_coords <- tibble(
     -89.4008    # Wisconsin 
   ),
   lat = c(
+    40.1106,
     40.0040, 
     30.4133,  
     33.2140, 
