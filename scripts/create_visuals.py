@@ -460,6 +460,7 @@ def create_voterteam_pair_weighted(input_csv: str, master_csv: str, min_votes: i
     df_plot.loc[df_plot['team'] == "Baylor Bears", 'team'] = "Baylor"
     df_plot.loc[df_plot['team'] == "Georgia Bulldogs", 'team'] = "Georgia"
     df_plot.loc[df_plot['team'] == "Clemson Tigers", 'team'] = "Clemson"
+    df_plot.loc[df_plot['voter'] == "Conor Oneill", 'voter'] = "Conor O'Neill"
     df_plot['label'] = df_plot['voter'] + ' / ' + df_plot['team']
     
     
@@ -472,8 +473,8 @@ def create_voterteam_pair_weighted(input_csv: str, master_csv: str, min_votes: i
     plt.xticks(fontsize=21) 
     plt.yticks(fontsize=19) 
     plt.axvline(x=0, color='black', linestyle='-', linewidth=1.5)
-    plt.xlabel('AP Bias', fontsize=21)
-    plt.ylabel('Voter/Team', fontsize=21)
+    plt.xlabel('Bias', fontsize=25)
+    plt.ylabel('Voter/Team', fontsize=25)
     plt.grid(True, alpha=0.3, axis='x')
     plt.tight_layout()
     base_name = os.path.splitext(os.path.basename(input_csv))[0]

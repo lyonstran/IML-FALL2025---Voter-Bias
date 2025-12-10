@@ -488,11 +488,11 @@ def create_voter_conference_biases(average_biases_csv, cfb_csv: str):
 
 def create_team_voter(voter_team_cutoff_csv, team_name, column_sort_by: str):
     df = pd.read_csv(voter_team_cutoff_csv)
-    #df = df[df["team"] == team_name]
+    df = df[df["team"] == team_name]
     df[column_sort_by] = pd.to_numeric(df[column_sort_by], errors='coerce')
     df = df.sort_values(by=column_sort_by)
-    
-    df.to_csv("voter_team_cutoff50_weighted_illinois.csv", index=False)
+    csv_name = "voter_team_cutoff50_weighted_" + team_name + ".csv"
+    df.to_csv(csv_name, index=False)
     return df
 
 
@@ -509,5 +509,56 @@ if __name__ == "__main__":
     # while (i <= 20):
     #     create_voter_team("/Users/albertbogdan/IML-FALL2025---Voter-Bias/results/cfb/original_data/master_bias.csv", 50)
     #     i += 20
-    create_team_voter("voter_team/voter_team_cutoff50_weighted.csv", "fighting-illini", "bias0_mean")
+    # list = [
+    #     "georgia-bulldogs",
+    #     "clemson-tigers",
+    #     "notre-dame-fighting-irish",
+    #     "oregon-ducks",
+    #     "texas-longhorns",
+    #     "penn-state-nittany-lions",
+    #     "oklahoma-state-cowboys",
+    #     "utah-utes",
+    #     "wisconsin-badgers",
+    #     "ohio-state-buckeyes",
+    #     "usc-trojans",
+    #     "auburn-tigers",
+    #     "florida-gators",
+    #     "ole-miss-rebels",
+    #     "texas-am-aggies",
+    #     "washington-huskies",
+    #     "michigan-state-spartans",
+    #     "florida-state-seminoles",
+    #     "baylor-bears",
+    #     "tcu-horned-frogs",
+    #     "miami-fl-hurricanes",
+    #     "cincinnati-bearcats",
+    #     "north-carolina-tar-heels",
+    #     "stanford-cardinal",
+    #     "ucla-bruins",
+    #     "boise-state-broncos",
+    #     "louisville-cardinals",
+    #     "mississippi-state-bulldogs",
+    #     "missouri-tigers",
+    #     "ucf-knights",
+    #     "houston-cougars",
+    #     "tennessee-volunteers",
+    #     "northwestern-wildcats",
+    #     "iowa-hawkeyes",
+    #     "west-virginia-mountaineers",
+    #     "colorado-buffaloes",
+    #     "arkansas-razorbacks",
+    #     "kansas-state-wildcats",
+    #     "duke-blue-devils",
+    #     "wake-forest-demon-deacons",
+    #     "kentucky-wildcats",
+    #     "iowa-state-cyclones",
+    #     "byu-cougars",
+    #     "north-carolina-state-wolfpack",
+    #     "washington-state-cougars",
+    #     "texas-tech-red-raiders",  
+    #     "virginia-tech-hokies",  
+    #     "south-carolina-gamecocks",
+    # ]
+    for i in range (1):
+        create_team_voter("voter_team/voter_team_cutoff50_weighted.csv", "fighting-illini", "bias1")
     
